@@ -1,0 +1,41 @@
+**20231018-r-try-out.R** 
+
+-     data contains the responses of children to the question on how parents would respond
+-     to certain actions. Up to two responses can be given
+-     the following responses are considered "harsh" for now:
+-     11 Scold,nag,criticize
+-     14 Threaten physical
+-     15 Wash mouth
+-     16 Hit with object
+-     17 Slap
+-     18 Spank
+-     but it does have all the info to generate a data dictionary
+
+**20231018-r-try-out.R** 
+
+- [ NOTE ]  data contains the responses of children to the question on how parents would respond
+- [ NOTE ]  to certain actions. Up to two responses can be given
+- [ NOTE ]  the following responses are considered "harsh" for now:
+- [ NOTE ]  11 Scold,nag,criticize
+- [ NOTE ]  14 Threaten physical
+- [ NOTE ]  15 Wash mouth
+- [ NOTE ]  16 Hit with object
+- [ NOTE ]  17 Slap
+- [ NOTE ]  18 Spank
+- [ NOTE ]  but it does have all the info to generate a data dictionary
+
+**20231018-r-try-out.R** 
+
+- [ NOTE ]  data contains the responses of children to the question on how parents would respond
+- [ NOTE ]  to certain actions. Up to two responses can be given
+- [ NOTE ]  the following responses are considered "harsh" for now:
+- [ NOTE ]  11 Scold,nag,criticize
+- [ NOTE ]  14 Threaten physical
+- [ NOTE ]  15 Wash mouth
+- [ NOTE ]  16 Hit with object
+- [ NOTE ]  17 Slap
+- [ NOTE ]  18 Spank
+- [ NOTE ]  but it does have all the info to generate a data dictionary
+- [ NOTE ]  C811L1A: Parents response to fight with sibs
+- [ NOTE ]  C811L2A: Parent #1 response to sass others
+

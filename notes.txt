@@ -1,0 +1,32 @@
+**scripts/icpsr/20231018-r-try-out.R** 
+
+- [ NOTE ]  data contains the responses of children to the question on how parents would respond
+- [ NOTE ]  to certain actions. Up to two responses can be given
+- [ NOTE ]  the following responses are considered "harsh" for now:
+- [ NOTE ]  11 Scold,nag,criticize
+- [ NOTE ]  14 Threaten physical
+- [ NOTE ]  15 Wash mouth
+- [ NOTE ]  16 Hit with object
+- [ NOTE ]  17 Slap
+- [ NOTE ]  18 Spank
+- [ NOTE ]  but it does have all the info to generate a data dictionary
+- [ NOTE ]  C811L1A: Parents response to fight with sibs
+- [ NOTE ]  C811L2A: Parent #1 response to sass others
+
+**scripts/icpsr/20231018-r-try-out.R**
+
+- [ NOTE ]  data contains the responses of children to the question on how parents would respond
+- [ NOTE ]  to certain actions. Up to two responses can be given
+- [ NOTE ]  the following responses are considered "harsh" for now:
+- [ NOTE ]  11 Scold,nag,criticize
+- [ NOTE ]  14 Threaten physical
+- [ NOTE ]  15 Wash mouth
+- [ NOTE ]  16 Hit with object
+- [ NOTE ]  17 Slap
+- [ NOTE ]  18 Spank
+- [ NOTE ]  but it does have all the info to generate a data dictionary
+- [ NOTE ]  generation 1 wave 1 g2 child reporting about parents harsh discipline
+- [ NOTE ]  before (re-)coding, number ascending
+- [ NOTE ]  C811L1A: Parents response to fight with sibs
+- [ NOTE ]  C811L2A: Parent #1 response to sass others
+
