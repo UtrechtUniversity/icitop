@@ -4,7 +4,7 @@ library(haven)
 library(labelled)
 library(todor)
 
-load(file='data/raw/icpsr/37939-0004-Data.rda')
+load(file='~~/37939-0004-Data.rda')
 
 data <- da37939.0004
 
@@ -19,12 +19,13 @@ data <- da37939.0004
 # NOTE 17 Slap
 # NOTE 18 Spank
  
+# check if data is labelled 
 haven::is.labelled(data) # NOTE but it does have all the info to generate a data dictionary 
 data.dictionary.1 <- labelled::generate_dictionary(data)
 data.dictionary.2 <- codebook::codebook_table(data)
-data.dictionary$levels
-data.dictionary$variable
-data.dictionary$label
+data.dictionary.1$levels # answer categories
+data.dictionary.1$variable # variable code
+data.dictionary.1$label # original question
 
 # NOTE generation 1 wave 1 g2 child reporting about parents harsh discipline
 # NOTE before (re-)coding, number ascending  
@@ -109,6 +110,7 @@ data.dictionary[[7]][which(colnames(data)%in%x)]
 notes <- todor_file("scripts/icpsr/20231018-r-try-out.R", todo_types = NULL, output = "markdown")
 notes <- str_remove_all(notes, "NOTE")
 notes <- str_remove_all(notes, "\\[|\\]")
+
 # writeLines(notes, "notes.txt")
 cat(notes, file = "notes.txt")
 cat(notes, file = "harsh-discipline.txt", append = TRUE)
