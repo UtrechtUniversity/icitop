@@ -8,7 +8,7 @@ library(codebook)
 # this script is a try-out
 # categories of parenting need to be checked again
 # based on this file, make an empty file with all categories that need to be coded and part of the script
-# last line = 367
+
 
 ######################
 # SETTINGS
@@ -114,8 +114,11 @@ exclude <- function(dataset_old, names_variables){
 # Get today's date
 today_date <- Sys.Date() # add this date to notes?
 
-# NOTES.todo 
-# Notes.demo
+# NOTES.todo  - everything that needs to be done (e.g., ask for more info) and discussed 
+# NOTES.demographics - all notes about the samples demographics
+# NOTES.parenting - all notes about the G1 and G2 parenting measures
+# NOTES.moderators - all notes about the samples demographics
+
 
 ######################
 # Read data
