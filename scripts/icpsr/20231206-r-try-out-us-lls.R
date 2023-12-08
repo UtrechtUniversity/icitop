@@ -4,9 +4,9 @@ library(haven)
 library(labelled)
 library(todor)
 library(codebook)
-library(synthpop) # for creating a synthetic dataset
+library(synthpop) # for creating a synthetic dataset 
 
-# this script is a try-out
+# this script is a try-out g
 # categories of parenting need to be checked again
 # based on this file, make an empty file with all categories that need to be coded and part of the script
 
@@ -68,20 +68,17 @@ colnames(dataset)[colnames(dataset) == names_variable]<-new_name
 return(dataset)
 }
 
-
 # Function for adding variables to the excluded dataset
 # Provide: name of the dataset in which the variables are stored, names of the variables
 # all variables will be stored in df.excluded
+# 20231206 added the df.excluded dataset to this function
 
 exclude <- function(dataset_old, names_variables){
-  dataset_new<-df.excluded
-  x_columns <- grep("X", colnames(dataset_new), value = TRUE)   # distill al X columns
-  #select the first empty X column and add variables from old dataset here
-  dataset_new[,which(names(dataset_new)%in%c(x_columns[1:(length(names_variables))]))]<-dataset_old[,c(which(names(dataset_old)%in%c(names_variables)))]
-  colnames(dataset_new)[which(names(dataset_new)%in%c(x_columns[1:(length(names_variables))]))]<-names_variables
-      return(dataset_new)
+  dataset_new<-data.frame(matrix(ncol = length(names_variables), nrow = nrow(dataset_old)))
+  colnames(dataset_new)<-names_variables
+  dataset_new<-dataset_old[,c(which(names(dataset_old)%in%c(names_variables)))]   #select the first empty X column and add variables from old dataset here
+   return(dataset_new)
 }
-
 
 # function for identifying variables without label
 labelinfo<-function(dataset){
@@ -105,8 +102,6 @@ new_column<-function(dataset, new_name, input){
   }
   return(dataset)
 } 
-
-
 
 ######################
 # NOTES
@@ -147,8 +142,6 @@ haven::is.labelled(df) # No doesn't mean that a codebook cannot be generated
 # USE write.csv(data.dictionary,'O:/Research/FSW/Research_data/JG/SanneG/ICITOP IPD_MA/102.us-lls/2.data-checks/20231127-102.us-lls-datadictionary-original.csv', row.names=FALSE)
 
 #2.recode and check data
-df.excluded<-data.frame(matrix(ncol = 1317, nrow = 457)) # empty dataframe for excluded variables
-
 # 2a. determine ID's
 # NOTE.ID code: us-lls
 # NOTE.ID number: 14
@@ -174,7 +167,7 @@ df.basic<-rename1(df.basic, "subcohortid","group_baseline")
 df.basic<-new_column(df.basic, "family_id", 1)
 
 # 4. participant ID (G2 focal participant)
-df.basic<-rename1(df.basic, "ID","id")
+df.basic<-rename1(df.basic, "id", "ID")
 
 # 5. code all the answers to the quesions in data request
 # copy info directly from what has been provided
@@ -210,7 +203,7 @@ df.basic<-new_column(df.basic,"additional.info", NA)
 
 # Add waves 
 df.basic<-new_column(df.basic,c("w1year","w2year","w3year", "v1year", "v2year"),c("1990-1992","2008-2010", "2018-2020", "2008-2010", "2019-2020") )
-df.basic$w1year
+
 
 # 6. RECODE VARIABLES
 # go through the send dataset from the top to the bottom and assign the right codes to each variable.
@@ -412,7 +405,18 @@ df.basic<-rename(df.basic,"g2v1g2qupar", c("I_RECH_OPP", "I_RECH_NEG", "I_RECH_S
                                                          "Q_FTKTY1","Q_FTKTY2","Q_FTKTY3","Q_FTKTY4","Q_FTKTY5",
                                                          "Q_FTKTY6","Q_FTKTY7","Q_FTKTY8","Q_FTKTY9","Q_FTKPR1",
                                                          "Q_FTKPR2","Q_FTKPR3","Q_FTKPR4","Q_FTKPR5","Q_FTKPR6",
-                                                         "Q_FTKPR7","Q_FTKPR8","Q_FTKPR9"),1)
+                                                         "Q_FTKPR7","Q_FTKPR8","Q_FTKPR9", "Q_YELL", "Q_RIDI",
+                                                          "Q_EMB",  "Q_STUP", "Q_SARC","Q_NOTK", "Q_THLV","Q_THAW",     
+                                                          "Q_GILT", "Q_SCREAM","Q_FYELL1","Q_FYELL2","Q_FYELL3","Q_FYELL4",
+                                           "Q_FYELL5","Q_FYELL6","Q_FYELL7","Q_FYELL8","Q_FYELL9","Q_FRIDI1","Q_FRIDI2",
+                                           "Q_FRIDI3","Q_FRIDI4","Q_FRIDI5","Q_FRIDI6","Q_FRIDI7","Q_FRIDI8","Q_FRIDI9",
+                                           "Q_FEMB1","Q_FEMB2","Q_FEMB3","Q_FEMB4","Q_FEMB5","Q_FEMB6","Q_FEMB7","Q_FEMB8",
+                                           "Q_FEMB9","Q_FSTUP1","Q_FSTUP2","Q_FSTUP3","Q_FSTUP4","Q_FSTUP5","Q_FSTUP6",
+                                           "Q_FSTUP7","Q_FSTUP8","Q_FSTUP9","Q_FSARC1","Q_FSARC2","Q_FSARC3","Q_FSARC4",
+                                           "Q_FSARC5","Q_FSARC6","Q_FSARC7","Q_FSARC8","Q_FSARC9","Q_FNOTK1","Q_FNOTK2",
+                                           "Q_FNOTK3","Q_FNOTK4","Q_FNOTK5","Q_FNOTK6","Q_FNOTK7","Q_FNOTK8","Q_FNOTK9",
+                                            "Q_FTHLV1","Q_FTHLV2","Q_FTHLV3","Q_FTHLV4","Q_FTHLV5","Q_FTHLV6","Q_FTHLV7","Q_FTHLV8","Q_FTHLV9","Q_FTHAW1","Q_FTHAW2","Q_FTHAW3","Q_FTHAW4","Q_FTHAW5","Q_FTHAW6","Q_FTHAW7","Q_FTHAW8","Q_FTHAW9","Q_FGILT1","Q_FGILT2","Q_FGILT3","Q_FGILT4","Q_FGILT5","Q_FGILT6","Q_FGILT7","Q_FGILT8","Q_FGILT9","Q_SCREAM1","Q_SCREAM2","Q_SCREAM3","Q_SCREAM4","Q_SCREAM5","Q_SCREAM6","Q_SCREAM7","Q_SCREAM8","Q_SCREAM9"
+                                                                                  ),1)
 
 # G2 moderators 1 measure
 
@@ -431,7 +435,7 @@ df.basic<-rename(df.basic,"g2v1c2eth",c("A_ETHGRP", "A_ETHCAT", "A_ETHRACE"),1)
 #G2 sex	g2[v1,2 etc/w1,2 etc][r]c2sex
 #G2 gender	g2[v1,2 etc/w1,2 etc][r]c2gen
 #NOTE.to do us-lls 30-11-2023 G2 sex and gender: ask if only gender is available
-df.basic<-rename(df.basic,"GENDER", "g2v1c2gen",1) 
+df.basic<-rename(df.basic, "g2v1c2gen","GENDER",1) 
 
 # G2 birth order for each G1 parent
 # NOTE.to do us-lls 30-11-2023 G2 birthorder ask if info is available
@@ -444,7 +448,7 @@ df.basic<-rename(df.basic,"g2v1c2age","A_AGE",1)
 # G2 relationship status	g2[v1,2 etc][r]c2rst
 # G2 relationship status
 #NOTE.todo us-lls 22-11-2023 check if G2 marital status is  from wave 1
-df.basic<-rename(df.basic,"g2v1c2rst",c("A_LVMAR", "A_LVMTIMS", "A_LVCURSP","B_PSBG", "B_PSCOMMIT", "B_PSLIV"),1)
+df.basic<-rename(df.basic,"g2v1c2rst",c("A_LVMAR", "A_LVMTIMS", "A_LVCURSP","B_PSBG", "B_PSCOMMIT", "B_PSLIV", "A_LVCURAL", "A_LVNBR", "B_PSROMREL"),1)
 
 # G2 type of caregiver	g2v[1,2,etc][r]c2car
 # type of G2 caregiver
@@ -482,7 +486,7 @@ df.basic<-rename(df.basic,"g2v1c2req", c("B_PSLIKE","B_PSACT","B_PSWRO","B_PSWRO
                                                        "S_PV_PNOASK","S_PV_IACCUS","S_PV_PACCUS","S_PV_ISPITE","S_PV_PSPITE","S_PV_ITHRHT","S_PV_PTHRHT","S_PV_IHRTND",
                                                        "S_PV_PHRTND","S_PV_IKICK","S_PV_PKICK","S_PV_ITHRSX2","S_PV_PTHRSX2","S_PV_IAGREE","S_PV_PAGREE","S_PVW_UNSF",
                                                        "S_PVW_ASHM","S_PVW_NORK","S_PVW_PROG","S_PVW_PRIS","S_PVW_NOPW","S_PVW_HIDTR","S_PVW_OWND","S_PVW_SCARE",
-                                                       "S_PVW_LOOK"),1)
+                                                       "S_PVW_LOOK", "H_PES_SP"),1)
 
 # G2 SES - family income	g2v[1,2,etc][r]vinc
 # G2 and partner education
@@ -559,68 +563,82 @@ df.basic<-rename(df.basic,"g3v1c3gen",c("A_LVGNDR1", "A_LVGNDR2", "A_LVGNDR3", "
 ########################################################################################
 # 7. Make a file with excluded variables
 
-df.excluded<-exclude(df,c("C_PC_REL","C_PC_SCH","C_PC_VOL","C_PC_POL","C_PC_ACT","C_PC_SMOK","C_PC_ALC",
-                          "C_PC_MARIJ","C_PC_DRUG","C_PC_FIGHT","C_PC_CRIME","C_PCARR","C_PCARRPY",
-                          "H_RES_CHIL","H_RIS_CHIL","M_SCR_BLACKv ","M_SCR_DTS","M_SCR_LIVER","M_SCR_ARR",
-                          "M_SCR2_FAMPR","Q_SPDIS", "Q_CHFMSP","Q_ROFMSP","Q_CHHRSP","Q_RMHRSP","Q_DKRMSP",
-                          "Q_GRNDSP","Q_LKOUSP","Q_YELLSP","Q_RIDISP","Q_EMBSP","Q_STUPSP","Q_HUMSP","Q_SARCSP",
-                          "Q_IGNOSP","Q_NOTKSP","Q_TKDSSP","Q_TKMLSP","Q_TKTYSP","Q_TKPRSP","Q_REASSP","Q_THRTSP",
-                          "Q_THLVSP","Q_THAWSP","Q_THWPSP","Q_SOAPSP","Q_BITESP","Q_BTBRSP","Q_PEPRSP","Q_SPNKSP",
-                          "Q_SLPSP","Q_SLPHSP","Q_SLPB","Q_SLPBSP","Q_SHAKSP","Q_PLHRSP","Q_PADLSP","Q_BELTSP",
-                          "Q_PADBSP","Q_BRNSP","Q_BRNMSP","Q_GILTSP","Q_SCREAMSP","Q_FCHFMSP1","Q_FCHFMSP2",
-                          "Q_FCHFMSP3","Q_FCHFMSP4","Q_FCHFMSP5","Q_FCHFMSP6","Q_FCHFMSP7","Q_FCHFMSP8",
-                          "Q_FCHFMSP9","Q_FROFMSP1","Q_FROFMSP2","Q_FROFMSP3","Q_FROFMSP4","Q_FROFMSP5",
-                          "Q_FROFMSP6","Q_FROFMSP7","Q_FROFMSP8","Q_FROFMSP9","Q_FCHHRSP1","Q_FCHHRSP2",
-                          "Q_FCHHRSP3","Q_FCHHRSP4","Q_FCHHRSP5","Q_FCHHRSP6","Q_FCHHRSP7","Q_FCHHRSP8",
-                          "Q_FCHHRSP9","Q_FRMHRSP1","Q_FRMHRSP2","Q_FRMHRSP3","Q_FRMHRSP4","Q_FRMHRSP5",
-                          "Q_FRMHRSP6","Q_FRMHRSP7","Q_FRMHRSP8","Q_FRMHRSP9","Q_FDKRMSP1","Q_FDKRMSP2",
-                          "Q_FDKRMSP3","Q_FDKRMSP4","Q_FDKRMSP5","Q_FDKRMSP6","Q_FDKRMSP7","Q_FDKRMSP8",
-                          "Q_FDKRMSP9","Q_FGRNDSP1","Q_FGRNDSP2","Q_FGRNDSP3","Q_FGRNDSP4","Q_FGRNDSP5",
-                          "Q_FGRNDSP6","Q_FGRNDSP7","Q_FGRNDSP8","Q_FGRNDSP9","Q_FLKOUSP1","Q_FLKOUSP2",
-                          "Q_FLKOUSP3","Q_FLKOUSP4","Q_FLKOUSP5","Q_FLKOUSP6","Q_FLKOUSP7","Q_FLKOUSP8",
-                          "Q_FLKOUSP9","Q_FYELLSP1","Q_FYELLSP2","Q_FYELLSP3","Q_FYELLSP4","Q_FYELLSP5",
-                          "Q_FYELLSP6","Q_FYELLSP7","Q_FYELLSP8","Q_FYELLSP9","Q_FRIDISP1","Q_FRIDISP2",
-                          "Q_FRIDISP3","Q_FRIDISP4","Q_FRIDISP5","Q_FRIDISP6","Q_FRIDISP7","Q_FRIDISP8",
-                          "Q_FRIDISP9","Q_FEMBSP1","Q_FEMBSP2","Q_FEMBSP3","Q_FEMBSP4","Q_FEMBSP5","Q_FEMBSP6",
-                          "Q_FEMBSP7","Q_FEMBSP8","Q_FEMBSP9","Q_FSTUPSP1","Q_FSTUPSP2","Q_FSTUPSP3","Q_FSTUPSP4",
-                          "Q_FSTUPSP5","Q_FSTUPSP6","Q_FSTUPSP7","Q_FSTUPSP8","Q_FSTUPSP9","Q_FHUMSP1","Q_FHUMSP2",
-                          "Q_FHUMSP3","Q_FHUMSP4","Q_FHUMSP5","Q_FHUMSP6","Q_FHUMSP7","Q_FHUMSP8","Q_FHUMSP9",
-                          "Q_FSARCSP1","Q_FSARCSP2","Q_FSARCSP3","Q_FSARCSP4","Q_FSARCSP5","Q_FSARCSP6",
-                          "Q_FSARCSP7","Q_FSARCSP8","Q_FSARCSP9","Q_FIGNOSP1","Q_FIGNOSP2","Q_FIGNOSP3","Q_FIGNOSP4",
-                          "Q_FIGNOSP5","Q_FIGNOSP6","Q_FIGNOSP7","Q_FIGNOSP8","Q_FIGNOSP9","Q_FTKDSSP1","Q_FTKDSSP2",
-                          "Q_FTKDSSP3","Q_FTKDSSP4","Q_FTKDSSP5","Q_FTKDSSP6","Q_FTKDSSP7","Q_FTKDSSP8","Q_FTKDSSP9",
-                          "Q_FTKMLSP1","Q_FTKMLSP2","Q_FTKMLSP3","Q_FTKMLSP4","Q_FTKMLSP5","Q_FTKMLSP6","Q_FTKMLSP7",
-                          "Q_FTKMLSP8","Q_FTKMLSP9","Q_FTKTYSP1","Q_FTKTYSP2","Q_FTKTYSP3","Q_FTKTYSP4","Q_FTKTYSP5",
-                          "Q_FTKTYSP6","Q_FTKTYSP7","Q_FTKTYSP8","Q_FTKTYSP9","Q_FTKPRSP1","Q_FTKPRSP2","Q_FTKPRSP3",
-                          "Q_FTKPRSP4","Q_FTKPRSP5","Q_FTKPRSP6","Q_FTKPRSP7","Q_FTKPRSP8","Q_FTKPRSP9","Q_FREASSP1",
-                          "Q_FREASSP2","Q_FREASSP3","Q_FREASSP4","Q_FREASSP5","Q_FREASSP6","Q_FREASSP7","Q_FREASSP8",
-                          "Q_FREASSP9","Q_FTHRTSP1","Q_FTHRTSP2","Q_FTHRTSP3","Q_FTHRTSP4","Q_FTHRTSP5","Q_FTHRTSP6",
-                          "Q_FTHRTSP7","Q_FTHRTSP8","Q_FTHRTSP9","Q_FTHLVSP1","Q_FTHLVSP2","Q_FTHLVSP3","Q_FTHLVSP4",
-                          "Q_FTHLVSP5","Q_FTHLVSP6","Q_FTHLVSP7","Q_FTHLVSP8","Q_FTHLVSP9","Q_FTHWPSP1","Q_FTHWPSP2",
-                          "Q_FTHWPSP3","Q_FTHWPSP4","Q_FTHWPSP5","Q_FTHWPSP6","Q_FTHWPSP7","Q_FTHWPSP8","Q_FTHWPSP9",
-                          "Q_FTHAWSP1","Q_FTHAWSP2","Q_FTHAWSP3","Q_FTHAWSP4","Q_FTHAWSP5","Q_FTHAWSP6","Q_FTHAWSP7",
-                          "Q_FTHAWSP8","Q_FTHAWSP9","Q_FTHWPSP1","Q_FTHWPSP2","Q_FTHWPSP3","Q_FTHWPSP4","Q_FTHWPSP5",
-                          "Q_FTHWPSP6","Q_FTHWPSP7","Q_FTHWPSP8","Q_FTHWPSP9","Q_FBITESP1","Q_FBITESP2","Q_FBITESP3",
-                          "Q_FBITESP4","Q_FBITESP5","Q_FBITESP6","Q_FBITESP7","Q_FBITESP8","Q_FBITESP9","Q_FBTBRSP1",
-                          "Q_FBTBRSP2","Q_FBTBRSP3","Q_FBTBRSP4","Q_FBTBRSP5","Q_FBTBRSP6","Q_FBTBRSP7","Q_FBTBRSP8",
-                          "Q_FBTBRSP9","Q_FPEPRSP1","Q_FPEPRSP2","Q_FPEPRSP3","Q_FPEPRSP4","Q_FPEPRSP5","Q_FPEPRSP6",
-                          "Q_FPEPRSP7","Q_FPEPRSP8","Q_FPEPRSP9","Q_FSPNKSP1","Q_FSPNKSP2","Q_FSPNKSP3","Q_FSPNKSP4",
-                          "Q_FSPNKSP5","Q_FSPNKSP6","Q_FSPNKSP7","Q_FSPNKSP8","Q_FSPNKSP9","Q_FSLPSP1","Q_FSLPSP2",
-                          "Q_FSLPSP3","Q_FSLPSP4","Q_FSLPSP5","Q_FSLPSP6","Q_FSLPSP7","Q_FSLPSP8","Q_FSLPSP9","Q_FSLPHSP1",
-                          "Q_FSLPHSP2","Q_FSLPHSP3","Q_FSLPHSP4","Q_FSLPHSP5","Q_FSLPHSP6","Q_FSLPHSP7","Q_FSLPHSP8",
-                          "Q_FSLPHSP9","Q_FSLPBSP1","Q_FSLPBSP2","Q_FSLPBSP3","Q_FSLPBSP4","Q_FSLPBSP5","Q_FSLPBSP6",
-                          "Q_FSLPBSP7","Q_FSLPBSP8","Q_FSLPBSP9","Q_FSHAKSP1","Q_FSHAKSP2","Q_FSHAKSP3","Q_FSHAKSP4",
-                          "Q_FSHAKSP5","Q_FSHAKSP6","Q_FSHAKSP7","Q_FSHAKSP8","Q_FSHAKSP9","Q_FPLHRSP1","Q_FPLHRSP2",
-                          "Q_FPLHRSP3","Q_FPLHRSP4","Q_FPLHRSP5","Q_FPLHRSP6","Q_FPLHRSP7","Q_FPLHRSP8","Q_FPLHRSP9",
-                          "Q_FPADLSP1","Q_FPADLSP2","Q_FPADLSP3","Q_FPADLSP4","Q_FPADLSP5","Q_FPADLSP6","Q_FPADLSP7",
-                          "Q_FPADLSP8","Q_FPADLSP9","Q_FBELTSP1","Q_FBELTSP2","Q_FBELTSP3","Q_FBELTSP4","Q_FBELTSP5",
-                          "Q_FBELTSP6","Q_FBELTSP7","Q_FBELTSP8","Q_FBELTSP9","Q_FPADBSP1","Q_FPADBSP2","Q_FPADBSP3",
-                          "Q_FPADBSP4","Q_FPADBSP5","Q_FPADBSP6","Q_FPADBSP7","Q_FPADBSP8","Q_FPADBSP9","Q_FBRNSP1",
-                          "Q_FBRNSP2","Q_FBRNSP3","Q_FBRNSP4","Q_FBRNSP5","Q_FBRNSP6","Q_FBRNSP7","Q_FBRNSP8","Q_FBRNSP9",
-                          "Q_FBRNMSP1","Q_FBRNMSP2","Q_FBRNMSP3","Q_FBRNMSP4","Q_FBRNMSP5","Q_FBRNMSP6","Q_FBRNMSP7",
-                          "Q_FBRNMSP8","Q_FBRNMSP9","Q_FGILTSP1","Q_FGILTSP2","Q_FGILTSP3","Q_FGILTSP4","Q_FGILTSP5",
-                          "Q_FGILTSP6","Q_FGILTSP7","Q_FGILTSP8","Q_FGILTSP9","Q_SCREAMSP1","Q_SCREAMSP2","Q_SCREAMSP3",
-                          "Q_SCREAMSP4","Q_SCREAMSP5","Q_SCREAMSP6","Q_SCREAMSP7","Q_SCREAMSP8","Q_SCREAMSP9"))
+columns_to_remove<-c("C_PC_REL","C_PC_SCH","C_PC_VOL","C_PC_POL","C_PC_ACT","C_PC_SMOK","C_PC_ALC",
+      "C_PC_MARIJ","C_PC_DRUG","C_PC_FIGHT","C_PC_CRIME","C_PCARR","C_PCARRPY",
+      "H_RES_CHIL","H_RIS_CHIL","M_SCR_BLACKv ","M_SCR_DTS","M_SCR_LIVER","M_SCR_ARR",
+      "M_SCR2_FAMPR","Q_SPDIS", "Q_CHFMSP","Q_ROFMSP","Q_CHHRSP","Q_RMHRSP","Q_DKRMSP",
+      "Q_GRNDSP","Q_LKOUSP","Q_YELLSP","Q_RIDISP","Q_EMBSP","Q_STUPSP","Q_HUMSP","Q_SARCSP",
+      "Q_IGNOSP","Q_NOTKSP","Q_TKDSSP","Q_TKMLSP","Q_TKTYSP","Q_TKPRSP","Q_REASSP","Q_THRTSP",
+      "Q_THLVSP","Q_THAWSP","Q_THWPSP","Q_SOAPSP","Q_BITESP","Q_BTBRSP","Q_PEPRSP","Q_SPNKSP",
+      "Q_SLPSP","Q_SLPHSP","Q_SLPB","Q_SLPBSP","Q_SHAKSP","Q_PLHRSP","Q_PADLSP","Q_BELTSP",
+      "Q_PADBSP","Q_BRNSP","Q_BRNMSP","Q_GILTSP","Q_SCREAMSP","Q_FCHFMSP1","Q_FCHFMSP2",
+      "Q_FCHFMSP3","Q_FCHFMSP4","Q_FCHFMSP5","Q_FCHFMSP6","Q_FCHFMSP7","Q_FCHFMSP8",
+      "Q_FCHFMSP9","Q_FROFMSP1","Q_FROFMSP2","Q_FROFMSP3","Q_FROFMSP4","Q_FROFMSP5",
+      "Q_FROFMSP6","Q_FROFMSP7","Q_FROFMSP8","Q_FROFMSP9","Q_FCHHRSP1","Q_FCHHRSP2",
+      "Q_FCHHRSP3","Q_FCHHRSP4","Q_FCHHRSP5","Q_FCHHRSP6","Q_FCHHRSP7","Q_FCHHRSP8",
+      "Q_FCHHRSP9","Q_FRMHRSP1","Q_FRMHRSP2","Q_FRMHRSP3","Q_FRMHRSP4","Q_FRMHRSP5",
+      "Q_FRMHRSP6","Q_FRMHRSP7","Q_FRMHRSP8","Q_FRMHRSP9","Q_FDKRMSP1","Q_FDKRMSP2",
+      "Q_FDKRMSP3","Q_FDKRMSP4","Q_FDKRMSP5","Q_FDKRMSP6","Q_FDKRMSP7","Q_FDKRMSP8",
+      "Q_FDKRMSP9","Q_FGRNDSP1","Q_FGRNDSP2","Q_FGRNDSP3","Q_FGRNDSP4","Q_FGRNDSP5",
+      "Q_FGRNDSP6","Q_FGRNDSP7","Q_FGRNDSP8","Q_FGRNDSP9","Q_FLKOUSP1","Q_FLKOUSP2",
+      "Q_FLKOUSP3","Q_FLKOUSP4","Q_FLKOUSP5","Q_FLKOUSP6","Q_FLKOUSP7","Q_FLKOUSP8",
+      "Q_FLKOUSP9","Q_FYELLSP1","Q_FYELLSP2","Q_FYELLSP3","Q_FYELLSP4","Q_FYELLSP5",
+      "Q_FYELLSP6","Q_FYELLSP7","Q_FYELLSP8","Q_FYELLSP9","Q_FRIDISP1","Q_FRIDISP2",
+      "Q_FRIDISP3","Q_FRIDISP4","Q_FRIDISP5","Q_FRIDISP6","Q_FRIDISP7","Q_FRIDISP8",
+      "Q_FRIDISP9","Q_FEMBSP1","Q_FEMBSP2","Q_FEMBSP3","Q_FEMBSP4","Q_FEMBSP5","Q_FEMBSP6",
+      "Q_FEMBSP7","Q_FEMBSP8","Q_FEMBSP9","Q_FSTUPSP1","Q_FSTUPSP2","Q_FSTUPSP3","Q_FSTUPSP4",
+      "Q_FSTUPSP5","Q_FSTUPSP6","Q_FSTUPSP7","Q_FSTUPSP8","Q_FSTUPSP9","Q_FHUMSP1","Q_FHUMSP2",
+      "Q_FHUMSP3","Q_FHUMSP4","Q_FHUMSP5","Q_FHUMSP6","Q_FHUMSP7","Q_FHUMSP8","Q_FHUMSP9",
+      "Q_FSARCSP1","Q_FSARCSP2","Q_FSARCSP3","Q_FSARCSP4","Q_FSARCSP5","Q_FSARCSP6",
+      "Q_FSARCSP7","Q_FSARCSP8","Q_FSARCSP9","Q_FIGNOSP1","Q_FIGNOSP2","Q_FIGNOSP3","Q_FIGNOSP4",
+      "Q_FIGNOSP5","Q_FIGNOSP6","Q_FIGNOSP7","Q_FIGNOSP8","Q_FIGNOSP9","Q_FTKDSSP1","Q_FTKDSSP2",
+      "Q_FTKDSSP3","Q_FTKDSSP4","Q_FTKDSSP5","Q_FTKDSSP6","Q_FTKDSSP7","Q_FTKDSSP8","Q_FTKDSSP9",
+      "Q_FTKMLSP1","Q_FTKMLSP2","Q_FTKMLSP3","Q_FTKMLSP4","Q_FTKMLSP5","Q_FTKMLSP6","Q_FTKMLSP7",
+      "Q_FTKMLSP8","Q_FTKMLSP9","Q_FTKTYSP1","Q_FTKTYSP2","Q_FTKTYSP3","Q_FTKTYSP4","Q_FTKTYSP5",
+      "Q_FTKTYSP6","Q_FTKTYSP7","Q_FTKTYSP8","Q_FTKTYSP9","Q_FTKPRSP1","Q_FTKPRSP2","Q_FTKPRSP3",
+      "Q_FTKPRSP4","Q_FTKPRSP5","Q_FTKPRSP6","Q_FTKPRSP7","Q_FTKPRSP8","Q_FTKPRSP9","Q_FREASSP1",
+      "Q_FREASSP2","Q_FREASSP3","Q_FREASSP4","Q_FREASSP5","Q_FREASSP6","Q_FREASSP7","Q_FREASSP8",
+      "Q_FREASSP9","Q_FTHRTSP1","Q_FTHRTSP2","Q_FTHRTSP3","Q_FTHRTSP4","Q_FTHRTSP5","Q_FTHRTSP6",
+      "Q_FTHRTSP7","Q_FTHRTSP8","Q_FTHRTSP9","Q_FTHLVSP1","Q_FTHLVSP2","Q_FTHLVSP3","Q_FTHLVSP4",
+      "Q_FTHLVSP5","Q_FTHLVSP6","Q_FTHLVSP7","Q_FTHLVSP8","Q_FTHLVSP9","Q_FTHWPSP1","Q_FTHWPSP2",
+      "Q_FTHWPSP3","Q_FTHWPSP4","Q_FTHWPSP5","Q_FTHWPSP6","Q_FTHWPSP7","Q_FTHWPSP8","Q_FTHWPSP9",
+      "Q_FTHAWSP1","Q_FTHAWSP2","Q_FTHAWSP3","Q_FTHAWSP4","Q_FTHAWSP5","Q_FTHAWSP6","Q_FTHAWSP7",
+      "Q_FTHAWSP8","Q_FTHAWSP9","Q_FTHWPSP1","Q_FTHWPSP2","Q_FTHWPSP3","Q_FTHWPSP4","Q_FTHWPSP5",
+      "Q_FTHWPSP6","Q_FTHWPSP7","Q_FTHWPSP8","Q_FTHWPSP9","Q_FBITESP1","Q_FBITESP2","Q_FBITESP3",
+      "Q_FBITESP4","Q_FBITESP5","Q_FBITESP6","Q_FBITESP7","Q_FBITESP8","Q_FBITESP9","Q_FBTBRSP1",
+      "Q_FBTBRSP2","Q_FBTBRSP3","Q_FBTBRSP4","Q_FBTBRSP5","Q_FBTBRSP6","Q_FBTBRSP7","Q_FBTBRSP8",
+      "Q_FBTBRSP9","Q_FPEPRSP1","Q_FPEPRSP2","Q_FPEPRSP3","Q_FPEPRSP4","Q_FPEPRSP5","Q_FPEPRSP6",
+      "Q_FPEPRSP7","Q_FPEPRSP8","Q_FPEPRSP9","Q_FSPNKSP1","Q_FSPNKSP2","Q_FSPNKSP3","Q_FSPNKSP4",
+      "Q_FSPNKSP5","Q_FSPNKSP6","Q_FSPNKSP7","Q_FSPNKSP8","Q_FSPNKSP9","Q_FSLPSP1","Q_FSLPSP2",
+      "Q_FSLPSP3","Q_FSLPSP4","Q_FSLPSP5","Q_FSLPSP6","Q_FSLPSP7","Q_FSLPSP8","Q_FSLPSP9","Q_FSLPHSP1",
+      "Q_FSLPHSP2","Q_FSLPHSP3","Q_FSLPHSP4","Q_FSLPHSP5","Q_FSLPHSP6","Q_FSLPHSP7","Q_FSLPHSP8",
+      "Q_FSLPHSP9","Q_FSLPBSP1","Q_FSLPBSP2","Q_FSLPBSP3","Q_FSLPBSP4","Q_FSLPBSP5","Q_FSLPBSP6",
+      "Q_FSLPBSP7","Q_FSLPBSP8","Q_FSLPBSP9","Q_FSHAKSP1","Q_FSHAKSP2","Q_FSHAKSP3","Q_FSHAKSP4",
+      "Q_FSHAKSP5","Q_FSHAKSP6","Q_FSHAKSP7","Q_FSHAKSP8","Q_FSHAKSP9","Q_FPLHRSP1","Q_FPLHRSP2",
+      "Q_FPLHRSP3","Q_FPLHRSP4","Q_FPLHRSP5","Q_FPLHRSP6","Q_FPLHRSP7","Q_FPLHRSP8","Q_FPLHRSP9",
+      "Q_FPADLSP1","Q_FPADLSP2","Q_FPADLSP3","Q_FPADLSP4","Q_FPADLSP5","Q_FPADLSP6","Q_FPADLSP7",
+      "Q_FPADLSP8","Q_FPADLSP9","Q_FBELTSP1","Q_FBELTSP2","Q_FBELTSP3","Q_FBELTSP4","Q_FBELTSP5",
+      "Q_FBELTSP6","Q_FBELTSP7","Q_FBELTSP8","Q_FBELTSP9","Q_FPADBSP1","Q_FPADBSP2","Q_FPADBSP3",
+      "Q_FPADBSP4","Q_FPADBSP5","Q_FPADBSP6","Q_FPADBSP7","Q_FPADBSP8","Q_FPADBSP9","Q_FBRNSP1",
+      "Q_FBRNSP2","Q_FBRNSP3","Q_FBRNSP4","Q_FBRNSP5","Q_FBRNSP6","Q_FBRNSP7","Q_FBRNSP8","Q_FBRNSP9",
+      "Q_FBRNMSP1","Q_FBRNMSP2","Q_FBRNMSP3","Q_FBRNMSP4","Q_FBRNMSP5","Q_FBRNMSP6","Q_FBRNMSP7",
+      "Q_FBRNMSP8","Q_FBRNMSP9","Q_FGILTSP1","Q_FGILTSP2","Q_FGILTSP3","Q_FGILTSP4","Q_FGILTSP5",
+      "Q_FGILTSP6","Q_FGILTSP7","Q_FGILTSP8","Q_FGILTSP9","Q_SCREAMSP1","Q_SCREAMSP2","Q_SCREAMSP3",
+      "Q_SCREAMSP4","Q_SCREAMSP5","Q_SCREAMSP6","Q_SCREAMSP7","Q_SCREAMSP8","Q_SCREAMSP9", "M_SCR_BLACK",
+      "Q_FNOTKSP1","Q_FNOTKSP2","Q_FNOTKSP3","Q_FNOTKSP4","Q_FNOTKSP5","Q_FNOTKSP6","Q_FNOTKSP7","Q_FNOTKSP8","Q_FNOTKSP9"
+)
+
+df.excluded<-exclude(df.basic,columns_to_remove)
+
+# remove these variables from the df.basic file
+df.basic <- df.basic[, !names(df.basic) %in% columns_to_remove]
+
+# check if there are any variables in df.basic that have not been recoded
+colnames(df.basic) # in this case all have capital letters, whereas all my names don't
+# perhaps always start with making all names capital?  
+not_included <- colnames(df.basic)[grep("[A-Z]", colnames(df.basic))]
+print(not_included)
+
 
 # 8 Add labels (if necessary)
 # Keep original labels, but add a label if this is not in SPSS file
