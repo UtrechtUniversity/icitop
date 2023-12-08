@@ -1,6 +1,6 @@
 ## Reading in from "config"-like files
 # Written by Dorien Huijser
-# Last edit 2023-12-07
+# Last edit 2023-12-08
 # With many thanks to ChatGPT :)
 
 #### Dependencies ####
@@ -18,19 +18,15 @@ study1_config <- study1_config %>%
   mutate(new_name = make.unique(new_name, 
                                 sep = "_"))
 
-# Identify common columns between data and config
-common_columns <- intersect(names(study1_data), 
-                            study1_config$orig_name)
+# Set the names of the to be renamed columns
+rename_cols <- setNames(as.character(study1_config$new_name), 
+                        as.character(study1_config$orig_name))
 
+# Rename the columns (code thanks to ChatGPT)
+study1_data_renamed <- study1_data %>%
+  rename_with(~rename_cols[.], .cols = names(rename_cols))
 
-#### WIP FROM HERE ####
-# Rename common columns in "study1_data" based on the mapping in "study1_config"
-study1_renameddata <- study1_data %>%
-  rename_with(~ study1_config$new_name[match(., study1_config$orig_name)], 
-              cols = common_columns)
-# This throws an error
 
 ### Delete variables listed in the config ###
-# NOT TESTED YET
-study1_renamed_removeddata <- study1_renameddata %>%
+study1_renamed_removeddata <- study1_data_renamed %>%
   select(-study1_config$exclude[nzchar(study1_config$exclude)])
