@@ -87,6 +87,7 @@ exclude <- function(dataset_old, names_variables){
 labelinfo<-function(dataset){
 columnnames <- names(dataset) # Create a vector of column names
 col<-length(columnnames) # length 
+
 # Loop through column names and check if labels are NULL
 # this loop works, but for some reason the labels in df.basic are not recognized
 for (col_name in colnames(dataset)) {
@@ -116,19 +117,32 @@ new_column<-function(dataset, new_name, input){
 # start each note with the relevant tag, followed by date and the code of the dataset, the variable, and note
 
 # Get today's date
+<<<<<<< HEAD
 today_date <- Sys.Date() # QUESTION NEHA add this date to notes? doesn't work yet
 
 # NOTES todo  - everything that needs to be done (e.g., ask for more info) and discussed 
 # NOTES.demographics - all notes about the samples demographics
 # NOTES.parenting - all notes about the G1 and G2 parenting measures
 # NOTES.moderators - all notes about the samples moderators
+=======
+today_date <- Sys.Date() # QUESTION NEHA add this date to notes?
+
+# NOTES.todo  - everything that needs to be done (e.g., ask for more info) and discussed 
+# NOTES.demographics - all notes about the samples demographics
+# NOTES.parenting - all notes about the G1 and G2 parenting measures
+# NOTES.moderators - all notes about the samples demographics
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
 # NOTE.ID - info needed to interpret the ID numbers 
 
 ######################
 # Read data
 ######################
 
+<<<<<<< HEAD
 df.basic<-read_sav(file='O:/Research/FSW/Research_data/JG/SanneG/ICITOP IPD_MA/102.us-lls/2.data-checks/ICITOP/Lehigh_ICITOP.sav')
+=======
+df<-read_sav(file='O:/Research/FSW/Research_data/JG/SanneG/ICITOP IPD_MA/102.us-lls/2.data-checks/ICITOP/Lehigh_ICITOP.sav')
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
 
 ######################
 # Data check
@@ -138,7 +152,11 @@ df.basic<-read_sav(file='O:/Research/FSW/Research_data/JG/SanneG/ICITOP IPD_MA/1
 
 # 1. check if data is labelled 
 haven::is.labelled(df) # No doesn't mean that a codebook cannot be generated
+<<<<<<< HEAD
  data.dictionary.1 <- labelled::generate_dictionary(df)
+=======
+# NOT USE data.dictionary.1 <- labelled::generate_dictionary(df)
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
 
 # USE data.dictionary.2 <- codebook::codebook_table(df) # this one is very slow but use this one
 
@@ -147,7 +165,15 @@ haven::is.labelled(df) # No doesn't mean that a codebook cannot be generated
 # USE write.csv(data.dictionary,'O:/Research/FSW/Research_data/JG/SanneG/ICITOP IPD_MA/102.us-lls/2.data-checks/20231127-102.us-lls-datadictionary-original.csv', row.names=FALSE)
 
 #2.recode and check data
+<<<<<<< HEAD
 df.excluded<-data.frame(matrix(ncol = 1317, nrow = 457)) # empty dataframe for excluded variables
+=======
+# make an empty dataframe for variables that will be kept (basic) and excluded
+# ncol = length original file + 1 (ID)
+
+df.basic <- data.frame(matrix(ncol = 1317, nrow = 457))
+df.excluded<-data.frame(matrix(ncol = 1317, nrow = 457))
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
 
 # 2a. determine ID's
 # NOTE.ID code: us-lls
@@ -158,12 +184,22 @@ df.excluded<-data.frame(matrix(ncol = 1317, nrow = 457)) # empty dataframe for e
 # NOTE.ID structure data = wide, so only 1 ID needed
 
 # 1. Study ID can be found in bta-overview (OSF)
+<<<<<<< HEAD
 df.basic<-new_column(df.basic, "study_id", 14)
+=======
+colnames(df.basic)[1]<-"studyid"
+df.basic$studyid<-14
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
 
 # 2. subcohort ID, use info in dataset
 # NOTE.ID lehigh has a variable on subcohort
 # another option is that two datasets have to be merged and an ID number needs to be added
+<<<<<<< HEAD
 df.basic<-rename1(df.basic, "subcohortid","group_baseline")
+=======
+colnames(df.basic)[2]<-"subcohortid"
+df.basic$subcohortid<-df$group_baseline
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
 
 #NOTE.ID subgroups: Group Assigned at Baseline 2 and 4 represent individuals recruited from social services or welfare systems, known to 
 #NOTE.ID have official reports of child abuse. All other numbers represent a community sample.
@@ -171,14 +207,22 @@ df.basic<-rename1(df.basic, "subcohortid","group_baseline")
 # 3. family ID - only relevant if multiple G2 participants per family
 # not applicable for Lehigh 
 # NOTE.question for 14.us-lls is family ID neccesary 
+<<<<<<< HEAD
 df.basic<-new_column(df.basic, "family_id", 1)
 
 # 4. participant ID (G2 focal participant)
 df.basic<-rename1(df.basic, "ID","id")
+=======
+
+# 4. participant ID (G2 focal participant)
+colnames(df.basic)[3]<-"id"
+df.basic$id<-df$ID
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
 
 # 5. code all the answers to the quesions in data request
 # copy info directly from what has been provided
 # Country and region where study took place
+<<<<<<< HEAD
 df.basic<-new_column(df.basic,"country", "USA")
 df.basic<-new_column(df.basic,"region", "Eastern Pennsylvania")
 
@@ -211,21 +255,84 @@ df.basic<-new_column(df.basic,"additional.info", NA)
 # Add waves 
 df.basic<-new_column(df.basic,c("w1year","w2year","w3year", "v1year", "v2year"),c("1990-1992","2008-2010", "2018-2020", "2008-2010", "2019-2020") )
 df.basic$w1year
+=======
+# I WILL CHANGE THIS INTO A Function that does not rely on position
+colnames(df.basic)[4]<-"country"
+df.basic$country<-"USA"
+
+colnames(df.basic)[5]<-"region"
+df.basic$region<-"eastern Pennsylvania"
+
+# Level of representativeness of the sample 
+colnames(df.basic)[6]<-"representativeness"
+df.basic$representativeness<-"The sample reflects the demographic makeup of the two-county area from which it was drawn but is not representative of the U.S. population."
+
+# Recruitment strategy
+colnames(df.basic)[7]<-"recruitment"
+df.basic$recruitment<-"Families/children were recruited from child welfare agencies in the two counties and from other group settings (day care programs, nursery school programs, Head Start programs) in that same area."
+
+# Is this sample specifically urban or rural?
+colnames(df.basic)[8]<-"urban"
+df.basic$urban<-"The area from which the participants were drawn is considered suburban. It sits outside of two relatively large urban centers (New York and Philadelphia)."
+
+# Year at start of the study 
+# NOTE.demo 20231127 102. us-lls year start was when G1 was 18 months old
+colnames(df.basic)[9]<-"year.start"
+df.basic$year.start<-1976
+
+# Year at which Generation 3 (G3) assessments started
+colnames(df.basic)[10]<-"year.start.g3"
+df.basic$`year.start.g3`<-2008
+
+# Original research focus when setting up study
+colnames(df.basic)[11]<-"original.focus"
+df$original.focus<-"correlates and consequences of child abuse and neglect, as well as resilience in child victims."
+
+# Criteria for parents to participate
+# NOTE.todo 20231127 102. us-lls critieria for participants ask if this is a criterium or a description of the data -Most children (G2) were from two-parent households when the study began.-
+colnames(df.basic)[12]<-"inclusion.criteria"
+
+# Any important information about the sample/study that is typically provided to understand the data 
+colnames(df.basic)[13]<-"additional.info"
+
+colnames(df.basic)[14]<-"w1year"
+colnames(df.basic)[15]<-"w2year"
+colnames(df.basic)[16]<-"w3year"
+colnames(df.basic)[17]<-"v1year"
+colnames(df.basic)[18]<-"v2year"
+colnames(df.basic)[19]<-"start"
+
+df.basic$w1year<-"1990-1992"
+df.basic$w2year<-"2008-2010"
+df.basic$w3year<-"2018-2020"
+
+df.basic$v1year<-"2008-2010"
+df.basic$v2year<-"2019-2020"
+df.basic$start<-"1976-1977"
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
 
 # 6. RECODE VARIABLES
 # go through the send dataset from the top to the bottom and assign the right codes to each variable.
 # NOTE developed a function through multiple rounds, but now that I try to change the code with the lasts function, it doesn't seem to work on 
 # all variables
+<<<<<<< HEAD
 # NOTE todo think about doing this with a config file? 
+=======
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
 
 # G1 parenting
 # in raw to basic: don't label specific parenting 
 # g1w[1,2, etc][reporter-target][instrument][c1,c2,ca, etc]par 
 
+<<<<<<< HEAD
 
 # mother parenting wave 1 (preschool)
 
 df.basic<-rename(df.basic, "g1w1mmquc1par", c("reschm44ff","resrmm44ff","reschh44ff","isrmh44ff","isdkrm44ff","reshse44ff",
+=======
+# mother parenting wave 1 (preschool)
+df.basic<-recode_and_rename(df.basic, df,  "g1w1mmquc1par", c("reschm44ff","resrmm44ff","reschh44ff","isrmh44ff","isdkrm44ff","reshse44ff",
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
                                             "lockhs44ff","yell44ff","ridicu44ff","embar44ff","humor44ff","ignore44ff",
                                             "desser44ff","meals44ff","tyos44ff","privil44ff","explan44ff","reward44ff",
                                             "thspan44ff","leave44ff","sendaw44ff","soap44ff","bite44ff","bitebr44ff",
@@ -238,7 +345,11 @@ df.basic<-rename(df.basic, "g1w1mmquc1par", c("reschm44ff","resrmm44ff","reschh4
                            ,1)
 
 # father parenting wave 1 (preschool)
+<<<<<<< HEAD
 df.basic<-rename(df.basic, "g1w1ffquc1par", c("rsch44fm","rsrm44fm","rchh44fm",
+=======
+df.basic<-recode_and_rename(df.basic, df,  "g1w1ffquc1par", c("rsch44fm","rsrm44fm","rchh44fm",
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
                                                               "isrh44fm","isdk44fm","rshs44fm",
                                                               "lkhs44fm","yell44fm","rdcu44fm",
                                                               "embr44fm","hmr44fm","ignr44fm",
@@ -259,7 +370,11 @@ df.basic<-rename(df.basic, "g1w1ffquc1par", c("rsch44fm","rsrm44fm","rchh44fm",
 
 # mother parenting wave 2 (school-age)
 
+<<<<<<< HEAD
 df.basic<-rename(df.basic, "g1w2mmquc1par", c("reschair38ff","resroom38ff","chairhr38ff","roomhr38ff","isodark38ff","ground38ff",
+=======
+df.basic<-recode_and_rename(df.basic, df,  "g1w2mmquc1par", c("reschair38ff","resroom38ff","chairhr38ff","roomhr38ff","isodark38ff","ground38ff",
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
 "lockout38ff","yell38ff","ridicule38ff","embar38ff","humor38ff","ignoreb38ff",
 "takedes38ff","takemeal38ff","taketoy38ff","takepriv38ff","explain38ff","thspank38ff",
 "thleave38ff","thsend38ff","soap38ff","biting38ff","bitebrus38ff","pepper38ff","spanked38ff",
@@ -267,7 +382,11 @@ df.basic<-rename(df.basic, "g1w2mmquc1par", c("reschair38ff","resroom38ff","chai
 "hitstrap38ff","hitbrus38ff","burn38ff","burnmark38ff"),1)
 
 # father parenting wave 2 (school-age)
+<<<<<<< HEAD
 df.basic<-rename(df.basic, "g1w2ffquc1par", c("rsch38fm","rsrm38fm","chhr38fm",
+=======
+df.basic<-recode_and_rename(df.basic, df,  "g1w2ffquc1par", c("rsch38fm","rsrm38fm","chhr38fm",
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
                                                               "rmhr38fm","isdk38fm","grnd38fm",
                                                               "lckt38fm","yell38fm","rdcl38fm",
                                                               "embr38fm","humr38fm","dshm38fm","ignr38fm",
@@ -287,17 +406,29 @@ df.basic<-rename(df.basic, "g1w2ffquc1par", c("rsch38fm","rsrm38fm","chhr38fm",
 # edu	SES - highest education level g1w[1,2,etc][r][m/f/p]edu
 #NOTE.todo 20231127 102.us-lls edu SES check if fedco is mom and medco is father + which wave (presumed preschool)?
 
+<<<<<<< HEAD
 df.basic<-rename(df.basic,  "g1w0medu","fedcom21", 1)
 df.basic<-rename(df.basic,  "g1w0fedu","medco21a", 1) # edu
 df.basic<-rename(df.basic,  "g1w1vses","zses", 1) ## vses	SES - global	g1w[1,2,etc][r]vses
 df.basic<-rename(df.basic, "g1w0vinc","atxinc28",1) # income
 df.basic<-rename(df.basic, "g1w0vadd", "totrm33",1)
+=======
+df.basic<-recode_and_rename(df.basic, df, "g1w0medu","fedcom21", 1)
+df.basic<-recode_and_rename(df.basic, df, "g1w0fedu","medco21a", 1) # edu
+df.basic<-recode_and_rename(df.basic, df, "g1w1vses","zses", 1) ## vses	SES - global	g1w[1,2,etc][r]vses
+df.basic<-recode_and_rename(df.basic, df,"g1w0vinc","atxinc28",1) # income
+df.basic<-recode_and_rename(df.basic, df,"g1w0vadd", "totrm33",1)
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
 
 # G1 type of caregiver g1w[1,2,etc][r][m/f/p]car
 #NOTE.todo 20231130 102.us-lls G1 type of caregiver check if variable is available
 
 # G1 sex & gender
+<<<<<<< HEAD
 df.basic<-rename(df.basic, "g1w1sex", "sex",1)
+=======
+df.basic<-recode_and_rename(df.basic, df,"g1w1sex", "sex",1)
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
 #NOTE.todo 20231130 102.us-lls G1 gender check if variable is available
 
 # G1 ethnicity 
@@ -329,7 +460,11 @@ df.basic<-rename(df.basic, "g1w1sex", "sex",1)
 # G2 parenting
 # #NOTE.todo us-lls 22-11-2023 G2 parenting check which wave this is measured
 
+<<<<<<< HEAD
 df.basic<-rename(df.basic,"g2v1g2qupar", c("I_RECH_OPP", "I_RECH_NEG", "I_RECH_SHAM", "I_RECH_PROV",
+=======
+df.basic<-recode_and_rename(df.basic,df,"g2v1g2qupar", c("I_RECH_OPP", "I_RECH_NEG", "I_RECH_SHAM", "I_RECH_PROV",
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
                                                          "I_RECH_PRID","I_CHSTR","H_PES_CHIL","H_PIS_CHIL", "I_CHENJOY", "I_CHSAT",
                                                          "Q__YELL","Q__RIDI","Q__EMB","Q__STUP","Q__SARC",
                                                          "Q__NOTK","Q__THLV","Q__THAW","Q__GILT","Q__SCREAM",
@@ -418,7 +553,11 @@ df.basic<-rename(df.basic,"g2v1g2qupar", c("I_RECH_OPP", "I_RECH_NEG", "I_RECH_S
 
 # G2 ethnicity	g2[v1,2 etc/w1,2 etc][r]c2eth
 #NOTE.to do us-lls 22-11-2023 check if G2 ethnicity is  from wave 1
+<<<<<<< HEAD
 df.basic<-rename(df.basic,"g2v1c2eth",c("A_ETHGRP", "A_ETHCAT", "A_ETHRACE"),1)
+=======
+df.basic<-recode_and_rename(df.basic,df,"g2v1c2eth",c("A_ETHGRP", "A_ETHCAT", "A_ETHRACE"),1)
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
 
 # G2 age at birth G3 g2[v1,2 etc][r]c2aab
 #NOTE.to do us-lls 22-11-2023 calculate age per wave with DOB & delete day for privacy
@@ -431,7 +570,11 @@ df.basic<-rename(df.basic,"g2v1c2eth",c("A_ETHGRP", "A_ETHCAT", "A_ETHRACE"),1)
 #G2 sex	g2[v1,2 etc/w1,2 etc][r]c2sex
 #G2 gender	g2[v1,2 etc/w1,2 etc][r]c2gen
 #NOTE.to do us-lls 30-11-2023 G2 sex and gender: ask if only gender is available
+<<<<<<< HEAD
 df.basic<-rename(df.basic,"GENDER", "g2v1c2gen",1) 
+=======
+df.basic<-recode_and_rename(df.basic,df,"GENDER", "g2v1c2gen",1) 
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
 
 # G2 birth order for each G1 parent
 # NOTE.to do us-lls 30-11-2023 G2 birthorder ask if info is available
@@ -439,18 +582,30 @@ df.basic<-rename(df.basic,"GENDER", "g2v1c2gen",1)
 # G2 moderators for each wave of parenting
 # G2 age	g2[w/v1,2 etc][r]c2age
 #NOTE.to do us-lls 30-11-2023 G2 age: ask for which wave
+<<<<<<< HEAD
 df.basic<-rename(df.basic,"g2v1c2age","A_AGE",1)
+=======
+df.basic<-recode_and_rename(df.basic,df,"g2v1c2age","A_AGE",1)
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
 
 # G2 relationship status	g2[v1,2 etc][r]c2rst
 # G2 relationship status
 #NOTE.todo us-lls 22-11-2023 check if G2 marital status is  from wave 1
+<<<<<<< HEAD
 df.basic<-rename(df.basic,"g2v1c2rst",c("A_LVMAR", "A_LVMTIMS", "A_LVCURSP","B_PSBG", "B_PSCOMMIT", "B_PSLIV"),1)
+=======
+df.basic<-recode_and_rename(df.basic,df,"g2v1c2rst",c("A_LVMAR", "A_LVMTIMS", "A_LVCURSP","B_PSBG", "B_PSCOMMIT", "B_PSLIV"),1)
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
 
 # G2 type of caregiver	g2v[1,2,etc][r]c2car
 # type of G2 caregiver
 #NOTE.todo us-lls 22-11-2023 check if G2 type of parent is from wave 1 and whether is involves all people in the household as opposed to only the children
 # Note.todo us-lls 22-11-2023. G2 type of caregiver if this study only focusses on biological children, select only those cases in which household member is biological child
+<<<<<<< HEAD
 df.basic<-rename(df.basic,"g2v1c2car",c("A_LVBIO1", "A_LVBIO2", "A_LVBIO3", "A_LVBIO4", "A_LVBIO5", "A_LVBIO6", "A_LVBIO7", "A_LVBIO8", "A_LVBIO9", "A_LVBIO10", "A_LVBIO11",
+=======
+df.basic<-recode_and_rename(df.basic,df,"g2v1c2car",c("A_LVBIO1", "A_LVBIO2", "A_LVBIO3", "A_LVBIO4", "A_LVBIO5", "A_LVBIO6", "A_LVBIO7", "A_LVBIO8", "A_LVBIO9", "A_LVBIO10", "A_LVBIO11",
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
                                                         "A_LVCHBIO1","A_LVCHBIO2","A_LVCHBIO3","A_LVCHBIO4","A_LVCHBIO5","A_LVCHBIO6"),1)
 
 # G2 ethnicity partner
@@ -458,12 +613,20 @@ df.basic<-rename(df.basic,"g2v1c2car",c("A_LVBIO1", "A_LVBIO2", "A_LVBIO3", "A_L
 
 # G2 indicators of relationship stability	g2v[1,2,etc][r]c2res
 # #NOTE.todo us-lls 22-11-2023  G2 relationship stability check which wave this is measured
+<<<<<<< HEAD
 df.basic<-rename(df.basic,"g2v1c2res", c("B_PSBGMO", "B_PSINF", "B_PSIMP" ),1)
+=======
+df.basic<-recode_and_rename(df.basic,df,"g2v1c2res", c("B_PSBGMO", "B_PSINF", "B_PSIMP" ),1)
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
 
 # G2 indicators of romantic rel quality	g2v[1,2,etc][r]c2req
 #NOTE.todo us-lls 22-11-2023 G2 relationship quality check which wave this is measured
 
+<<<<<<< HEAD
 df.basic<-rename(df.basic,"g2v1c2req", c("B_PSLIKE","B_PSACT","B_PSWRO","B_PSWROTIM","B_PSAFF","B_PSSUP",
+=======
+df.basic<-recode_and_rename(df.basic,df,"g2v1c2req", c("B_PSLIKE","B_PSACT","B_PSWRO","B_PSWROTIM","B_PSAFF","B_PSSUP",
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
                                                        "B_PSLOY","B_PSSTR","B_PSSATSEX","B_PSSAT","B_SD","B_SDCHIL","B_SD_ARG",
                                                        "B_SD_DIS","B_SD_YOUDIS","B_SD_OTHDIS","B_SD_YOUEMB","B_SD_OTHEMB","B_SD_YOUCON",
                                                        "B_SD_OTHCON","B_SD_YOUCHG","B_SD_OTHCHG","B_SD_YOUSER","B_SD_OTHSER","B_SD_YOUAV",
@@ -487,6 +650,7 @@ df.basic<-rename(df.basic,"g2v1c2req", c("B_PSLIKE","B_PSACT","B_PSWRO","B_PSWRO
 # G2 SES - family income	g2v[1,2,etc][r]vinc
 # G2 and partner education
 # #NOTE.todo us-lls 22-11-2023 G2 and partner education check which wave this is measured
+<<<<<<< HEAD
 df.basic<-rename(df.basic,"g2v1r2edu", c("C_PCSCHCM", "W_SCHLVCOM"),1)
 
 # G2  occupation
@@ -496,6 +660,18 @@ df.basic<-rename(df.basic,"g2v1r2occ", c("X_EMPCUR", "C_PCEMP"),1)
 # G2 income
 # NOTE.todo us-lls 22-11-2023 G2 income check which wave this is measured
 df.basic<-rename(df.basic,"g2v1vinc", c("Y_FINEARIN", "Y_FIN"),1)
+=======
+df.basic<-recode_and_rename(df.basic,df,"g2v1r2edu", c("C_PCSCHCM", "W_SCHLVCOM"),1)
+
+# G2  occupation
+# NOTE.todo us-lls 22-11-2023 G2 occupation check which wave this is measured
+df.basic<-recode_and_rename(df.basic,df,"g2v1r2occ", c("X_EMPCUR"),1)
+df.basic<-recode_and_rename(df.basic,df,g2v1r2occ, c("C_PCEMP"),1)
+
+# G2 income
+# NOTE.todo us-lls 22-11-2023 G2 income check which wave this is measured
+df.basic<-recode_and_rename(df.basic,df,"g2v1vinc", c("Y_FINEARIN", "Y_FIN"),1)
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
 
 # SES - global	g2v[1,2,etc][r]vses
 # NOTE.todo us-lls 30-11-2023 G2 ses if global measures of SES have been calculated
@@ -504,6 +680,7 @@ df.basic<-rename(df.basic,"g2v1vinc", c("Y_FINEARIN", "Y_FIN"),1)
 # #NOTE.todo us-lls 22-11-2023 G2 substance use check which wave this is measured
 
 # G2 alcohol use
+<<<<<<< HEAD
 df.basic<-rename(df.basic,"g2v2c2qualc", c("M_SUBALC", "M_SUBALCYR","M_SUBALCYR1","M_SUBWKDRK","M_SUBWKNDR",
                                                          "M_SUBBINGE","M_SUBALCMO","M_SUBINMO","M_SUBDRUNK"),1)
 
@@ -513,6 +690,17 @@ df.basic<-rename(df.basic,"g2v2c2qudru", c("M_SUBMJ","M_SUBMJYR","M_SUBMJTM","M_
 
 # G2 substance use
 df.basic<-rename(df.basic,"g2v2c2qusub",c("M_SCRUSAL","M_SCR_TOMU","M_SCR_CUT","M_SCR_HELP","M_SCR_HLTH",
+=======
+df.basic<-recode_and_rename(df.basic,df,"g2v2c2qualc", c("M_SUBALC", "M_SUBALCYR","M_SUBALCYR1","M_SUBWKDRK","M_SUBWKNDR",
+                                                         "M_SUBBINGE","M_SUBALCMO","M_SUBINMO","M_SUBDRUNK"),1)
+
+# G2 drug use
+df.basic<-recode_and_rename(df.basic,df,"g2v2c2qudru", c("M_SUBMJ","M_SUBMJYR","M_SUBMJTM","M_SUBMJAMT","M_SUBMJMO",
+                                                         "M_SCR_CRWL", "M_SCR_INJUR", "M_SCR_NEEDL"),1)
+
+# G2 substance use
+df.basic<-recode_and_rename(df.basic,df,"g2v2c2qusub",c("M_SCRUSAL","M_SCR_TOMU","M_SCR_CUT","M_SCR_HELP","M_SCR_HLTH",
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
                                                         "M_SCR_HEAD","M_SCR_WD","M_SCR_FAM","M_SCR_WRK","M_SCR_FGHT",
                                                         "M_SCR_MORE","M_SCR_THINK","M_SCR_ACT","M_SCR_GUILT","M_SCR2_PROB",
                                                         "M_SCR2_PRBNW"
@@ -524,7 +712,11 @@ df.basic<-rename(df.basic,"g2v2c2qusub",c("M_SCRUSAL","M_SCR_TOMU","M_SCR_CUT","
 # G2 involvement
 #NOTE.todo 22-11-2023 102.us-lls G2 involvementcheck if living with children is from wave 1
 
+<<<<<<< HEAD
 df.basic<-rename(df.basic,"g2v1c2inv",c("A_LVCURCH", "A_LVOTHCH", "A_LVOTHNB","NOCONTACT",
+=======
+df.basic<-recode_and_rename(df.basic,df,"g2v1c2inv",c("A_LVCURCH", "A_LVOTHCH", "A_LVOTHNB","NOCONTACT",
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
                                                       "A_LVCHPY1","A_LVCHPY2","A_LVCHPY3","A_LVCHPY4","A_LVCHPY5",
                                                       "A_LVCHPY6","A_LVCHPC1","A_LVCHPC2","A_LVCHPC3","A_LVCHPC4",
                                                       "A_LVCHPC5","A_LVCHPC6","A_LVCHCON1","A_LVCHCON2","A_LVCHCON3",
@@ -537,7 +729,11 @@ df.basic<-rename(df.basic,"g2v1c2inv",c("A_LVCURCH", "A_LVOTHCH", "A_LVOTHNB","N
 
 #N G3 children 	g2[v1,2 etc][r]c2nch
 #NOTE.todo  22-11-2023 102. us-lls check if G3 n children is  from wave 1
+<<<<<<< HEAD
 df.basic<-rename(df.basic,"g2v1c2nch",c("A_CHNUM"),1)
+=======
+df.basic<-recode_and_rename(df.basic,df,"g2v1c2nch",c("A_CHNUM"),1)
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
 
 #Birth order G3 children	g3[v1,2 etc][r]c3bir
 # Note.todo us-lls 30-11-2023 102. us-lls check if birth-order can be determined with age
@@ -545,7 +741,11 @@ df.basic<-rename(df.basic,"g2v1c2nch",c("A_CHNUM"),1)
 #G3 age	g3[v1,2 etc][r]c3age
 # NOTE.todo us-lls 22-11-2023 102. us-llscheck if G3 age is from wave 1 and whether is involves all people in the household as opposed to only the children
 # Note.todo us-lls 22-11-2023 102. us-lls G3 age if this study only focusses on biological children, select only those cases in which household member is biological child
+<<<<<<< HEAD
 df.basic<-rename(df.basic,"g3v1c3age",c("A_LVAGE1","A_LVAGE2","A_LVAGE3","A_LVAGE4","A_LVAGE5","A_LVAGE6","A_LVAGE7","A_LVAGE8","A_LVAGE9","A_LVAGE10","A_LVAGE11"),1)
+=======
+df.basic<-recode_and_rename(df.basic,df,"g3v1c3age",c("A_LVAGE1","A_LVAGE2","A_LVAGE3","A_LVAGE4","A_LVAGE5","A_LVAGE6","A_LVAGE7","A_LVAGE8","A_LVAGE9","A_LVAGE10","A_LVAGE11"),1)
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
 
 #G3 sex	g3[v1,2 etc][r]c3sex
 # Note.todo us-lls 22-11-2023 102. us-lls G3 sex check if available (next to gender)
@@ -553,7 +753,11 @@ df.basic<-rename(df.basic,"g3v1c3age",c("A_LVAGE1","A_LVAGE2","A_LVAGE3","A_LVAG
 #G3 gender	g3[v1,2 etc][r]c3gen
 #NOTE.todo us-lls 22-11-2023 102. us-llscheck if G3 gender is from wave 1 and whether is involves all people in the household as opposed to only the children
 # Note.todo us-lls 22-11-2023.102. us-lls G3 gender if this study only focusses on biological children, select only those cases in which household member is biological child
+<<<<<<< HEAD
 df.basic<-rename(df.basic,"g3v1c3gen",c("A_LVGNDR1", "A_LVGNDR2", "A_LVGNDR3", "A_LVGNDR4", "A_LVGNDR5", "A_LVGNDR6", "A_LVGNDR7", "A_LVGNDR8", "A_LVGNDR9", "A_LVGNDR10", "A_LVGNDR11",
+=======
+df.basic<-recode_and_rename(df.basic,df,"g3v1c3gen",c("A_LVGNDR1", "A_LVGNDR2", "A_LVGNDR3", "A_LVGNDR4", "A_LVGNDR5", "A_LVGNDR6", "A_LVGNDR7", "A_LVGNDR8", "A_LVGNDR9", "A_LVGNDR10", "A_LVGNDR11",
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
                                                         "A_LVCHGDR1","A_LVCHGDR2","A_LVCHGDR3","A_LVCHGDR4","A_LVCHGDR5","A_LVCHGDR6"),1)
 
 ########################################################################################
@@ -622,11 +826,19 @@ df.excluded<-exclude(df,c("C_PC_REL","C_PC_SCH","C_PC_VOL","C_PC_POL","C_PC_ACT"
                           "Q_FGILTSP6","Q_FGILTSP7","Q_FGILTSP8","Q_FGILTSP9","Q_SCREAMSP1","Q_SCREAMSP2","Q_SCREAMSP3",
                           "Q_SCREAMSP4","Q_SCREAMSP5","Q_SCREAMSP6","Q_SCREAMSP7","Q_SCREAMSP8","Q_SCREAMSP9"))
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
 # 8 Add labels (if necessary)
 # Keep original labels, but add a label if this is not in SPSS file
 df.basic<-df.basic[,-which(colnames(df.basic)%in%grep("X", colnames(df.basic), value = TRUE))] # delete unused columns 
 
+<<<<<<< HEAD
 labelinfo(df.basic) # PROBLEM: does not recognize labels - solved if not making a seperate dataset
+=======
+labelinfo(df.basic) # PROBLEM: does not recognize labels
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
 
 # add labels that are missing 
 attr(df.basic$studyid, "label") <- "study id" #do not change; used for merging
@@ -646,11 +858,17 @@ attr(df.basic$g1w0fedu,"labels")
 # 10. check data with Meta-analysis: any variables missing? 
 # Load meta-analysis data and check parenting variables?
 
+<<<<<<< HEAD
 #### 
 # 11. Do a basic descriptives check
 
 
 # 12. Update codebook ----
+=======
+# 11. Do a basic descriptives check
+
+# 12. Update codebook
+>>>>>>> b1daab716db46f68bf63648e772df0ea80f8f89a
 
 data.dictionary.3 <- rename(data.dictionary, item = variable)
 
