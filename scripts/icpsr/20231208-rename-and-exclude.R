@@ -25,5 +25,5 @@ colnames(df.included)<-study1_config[!is.na(study1_config$new_name),]$new_name
 
 
 
-all_labels <- lapply(df, function(x) attr(x, "label"))
+
 

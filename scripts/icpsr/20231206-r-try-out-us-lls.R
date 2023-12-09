@@ -1,6 +1,5 @@
 library(psych)
 library(tidyverse)
-library(haven)
 library(labelled)
 library(todor)
 library(codebook)
@@ -135,7 +134,7 @@ df.basic<-read_sav(file='O:/Research/FSW/Research_data/JG/SanneG/ICITOP IPD_MA/1
 haven::is.labelled(df) # No doesn't mean that a codebook cannot be generated
  data.dictionary.1 <- labelled::generate_dictionary(df)
 
-# USE data.dictionary.2 <- codebook::codebook_table(df) # this one is very slow but use this one
+ data.dictionary <- codebook::codebook_table(df) # this one is very slow but use this one
 
 # USE data.dictionary<-data.dictionary.2[,c(1,2,4,5,6,9,10,11,12,13)]
 
