@@ -1,7 +1,6 @@
 ## Basic data check and cleaning
 # Last edit 2023-12-08
 ###############################
-#### Dependencies ####
 
 #library
 library(haven) # for working with SPSS files
