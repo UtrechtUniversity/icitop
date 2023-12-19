@@ -6,5 +6,3 @@ new_column<-function(dataset, new_name, input){
   }
   return(dataset)
 } 
-
-df.included<-new_column(df.included,colnames(added.values),added.values[1,])
