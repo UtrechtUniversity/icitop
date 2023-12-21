@@ -40,8 +40,6 @@ rename_columns <- function(df, rename_data) {
   return(df)
 }
 
-attr(df.basic$studyid, "label")
-
 # change labels 
 rename_labels <- function(df, rename_data) {
   for (i in 1:length(colnames(df))) {
