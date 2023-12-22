@@ -50,7 +50,6 @@ studyname <- "102.us-lls"
 df.basic <- read_sav(file = paste0(paths$load_data))
 
 # Check if df.basic is a tbl_df and otherwise convert to tibble
-# QUESTION DH: What is the reason that we need to check this? Do we need to check this for every study?
 if ("tbl_df" %in% class(df.basic)) {
   print("It's a tibble!")
 } else {
@@ -69,16 +68,7 @@ rename.empty <- create_rename_file(data.dictionary, studyname, "data/102.us-lls/
 # second to-be-filled one doesn't have to be created manually.
 
 ###### Stop ###### 
-
-# COMMENT DH: the 1 and 2 in the data check files are a bit confusing now,
-# perhaps it makes more sense to stick to the order that you are using here, so:
-# 1_rename_studyname_empty.csv
-# 1_rename_studyname_filled.csv
-# 2_recode_studyname_empty.csv
-# 2_recode_studyname_filled.csv
-# 3_ ...
 # (it's better to use _ than . in a filename: https://stackoverflow.com/a/72379888)
-# If we decide to change this: change in create_rename_file.R as well
 
 ### Instruction for filling the rename file (manual work) ####
 # - For each variable, determine the new name 
