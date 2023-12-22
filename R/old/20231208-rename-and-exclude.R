@@ -6,7 +6,6 @@
 library(haven) # for working with SPSS files
 library(codebook) # for making codebook
 library(tidyverse) # multiple purposes; e.g., read_delim
-library(tidyverse)
 library(labelled)
 
 # Make the new names unique if they are the same (appends a number to the name)
