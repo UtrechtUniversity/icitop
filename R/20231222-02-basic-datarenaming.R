@@ -40,6 +40,8 @@ excludedpath <- paste0(paths$exclude)
 added_values <- read_delim(file = paste0(paths$read_new_columns),
                            delim = ";")
 
+# Study ID in meta analysis (if present)
+study_id_ma <- 102
 
 ### 3. Relabel and exclude ####
 rename_basic <- read_delim(file = renamepath,
@@ -52,7 +54,7 @@ df_excluded <- rawdata[, is.na(rename_basic$new_name)]
 # Write the file with excluded variables
 write.csv(df_excluded, excludedpath, row.names = FALSE)
 
-# Rename the indicated labels and columns
+# Rename the indicated labels and columns and add new columns
 df_included <- rawdata[, !is.na(rename_basic$new_name)] %>%
   # Rename columns according to the rename_basic file
   rename_columns(rename_basic) %>%
@@ -65,9 +67,38 @@ df_included <- rawdata[, !is.na(rename_basic$new_name)] %>%
 
 
 ### 4. Check if variables from MA are missing ####
-meta.outcome <- read_excel("config/20231221-g2-parenting.xlsx") 
-meta.predictor <- read_excel("config/20231221-g1-parenting.xlsx") 
+meta_outcome <- read_excel("config/20231221-g2-parenting.xlsx") 
+meta_predictor <- read_excel("config/20231221-g1-parenting.xlsx") 
 
+# Filter both outcomes and predictors on the study ID (should be there according to the MA)
+# TO BE ADJUSTED WHERE USEFUL
+present_outcomes <- meta_outcome %>%
+  filter(S_ID == study_id_ma) %>% 
+  select(S_ID, Outcome_name, Outcome_description) %>% # Could also select more if needed...
+  mutate(variable_type = "outcome_ma") %>%
+  relocate(variable_type, .after = S_ID) %>%
+  rename(name = Outcome_name, description = Outcome_description)
+
+present_predictors <- meta_predictor %>%
+  filter(S_ID == study_id_ma) %>%
+  select(S_ID, Predictor_name, Predictor_description) %>%
+  mutate(variable_type = "predictor_ma") %>%
+  relocate(variable_type, .after = S_ID) %>%
+  rename(name = Predictor_name, description = Predictor_description)
+
+# Select info from data_dictionary (received data)
+# TO BE ADJUSTED WHERE USEFUL
+in_received_dataset <- rename_basic %>%
+  filter(str_detect(new_name, "par") & str_detect(new_name, "g2")) %>%
+  select(name, label, new_name) %>%
+  mutate(variable_type = "received_data") %>%
+  rename(description = label)
+
+compare_ma_with_received <- bind_rows(present_outcomes,
+                                      present_predictors,
+                                      in_received_dataset)
+
+# Old
 meta.outcome[meta.outcome$S_ID==102, ]$Outcome_name
 meta.outcome[meta.outcome$S_ID==102, ]$Outcome_description
 
