@@ -17,4 +17,4 @@ new_column <- function(dataset, new_columns_df) {
     dataset[[colnames(new_columns_df[col])]] <- new_columns_df[1, col]
   }
   return(dataset)
-  }
+}
