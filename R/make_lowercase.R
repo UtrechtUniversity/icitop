@@ -7,7 +7,7 @@
 #'                           new_label = c("miles per gallon","cylinder size"))
 #' lowercase <- convert_to_lowercase(lower_case_mtcars)
 
-convert_to_lowercase <- function(df) {
+make_lowercase <- function(df) {
   # Convert column names to lowercase
   colnames(df) <- tolower(colnames(df))
   return(df)
