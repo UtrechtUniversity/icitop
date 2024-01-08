@@ -28,26 +28,20 @@ create_rename_file <- function(codebook, study, path){
     )
   
   # Write the first 2 columns of the codebook to csv
-  # NOTE that the name of this object is now not taken from the write_rename variable in paths
   # Save the empty version
   write.csv(renameobject,
-            paste0(path, "/1.rename_", study, "_empty.csv"),
+            paste0(path, "/1_rename_", study, "_empty.csv"),
             row.names = FALSE)
   
-#The to be filled version
-write.csv(renameobject,
-          paste0(path, "/2.rename_", study, "_filled.csv"),
-         row.names = FALSE)
+  # And save the to be filled version if it's not already there
+  to_be_filled_file <- paste0(path, "/1_rename_", study, "_filled.csv")
   
-# output_file <- paste0(path, "/2.rename_", study, "_filled.csv")
-  
-# NEWLY ADDED Check if the file already exists - see email 22-23-2023
-  if (!file.exists(output_file)) {
+  if (!file.exists(to_be_filled_file)) {
     # Write the CSV file only if it doesn't exist
-    write.csv(renameobject, output_file, row.names = FALSE)
-    cat("CSV file written:", output_file, "\n")
+    write.csv(renameobject, to_be_filled_file, row.names = FALSE)
+    cat("CSV file written:", to_be_filled_file, "\n")
   } else {
-    cat("CSV file already exists:", output_file, "\n")
+    cat("CSV file already exists:", to_be_filled_file, "\n", "File not overwritten")
   }
   
   # Save the object in the Environment
