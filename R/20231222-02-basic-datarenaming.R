@@ -32,7 +32,9 @@ studyname <- "102.us-lls"
 paths <- read_delim("data/102.us-lls/2.data-checks/paths-102.us-lls.csv")
 
 renamepath <- paste0(paths$read_rename)
-rawdata <- read_sav(paste0(paths$load_data)) # Perhaps just re-run the code from basic-dataprep? discuss
+rawdata <- load(file= paste0("data/24.us-mlsra/2. data checks/dataprep-",
+                             studyname,
+                             ".rda")) #read_sav(paste0(paths$load_data)) # Perhaps just re-run the code from basic-dataprep? discuss
 excludedpath <- paste0(paths$exclude)
 
 # Open new_columns csv file and provide values in each column, in row 2
