@@ -92,3 +92,8 @@ data_dictionary <- create_codebook(merged_df, codebookpath)
 
 # Write an empty rename file for this study: one as empty one, and one to be filled
 rename_empty <- create_rename_file(data_dictionary, studyname, renamepath)
+
+# Write the merged_df dataframe to an .rda file for later further processing
+save(merged_df, file= paste0("data/24.us-mlsra/2. data checks/dataprep-",
+                             studyname,
+                             ".rda"))
