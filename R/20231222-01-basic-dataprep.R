@@ -13,7 +13,7 @@
 
 ### 1. Load dependencies ####
 # Generic libraries
-library(readxl)
+library(readxl) 
 library(haven) # for working with SPSS files
 library(codebook) # for making codebook
 library(tidyverse) # multiple purposes; e.g., read_delim
@@ -64,7 +64,7 @@ renamepath <- "data/24.us-mlsra/2. data checks"
 ### 3. Prepare data for relabelling ####
 # Load data file(s) into a list object, the name of each list item is the file path for trackability
 # Note that now haven::read_sav() is used. We can also write a function that 
-# uses a different read function based on the file extension
+# uses a different read function based on the file extension - yes, good idea. discuss
 dfs <- sapply(file_paths, 
               function(path) read_sav(path), 
               simplify = FALSE)
@@ -75,7 +75,7 @@ dfs_lower <- lapply(dfs, make_lowercase)
 # Merge all dfs into 1 merged_df
 merged_df <- bind_rows(dfs_lower, .id = "source_id")
 
-# If you want to convert the source_id column to a factor, you can do this:
+# If you want to convert the source_id column to a factor, you can do this: discuss
 merged_df$source_id <- as.factor(merged_df$source_id)
 
 # Check if merged_df is a tbl_df and otherwise convert to tibble

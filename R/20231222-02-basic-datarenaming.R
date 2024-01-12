@@ -3,7 +3,7 @@
 ###############################
 
 # (it's better to use _ than . in a filename: https://stackoverflow.com/a/72379888)
-# TO DO SANNE: CHANGE THIS
+# TO DO SANNE: CHANGE THIS - discuss - does this refer to study names?
 
 ### Instruction for filling the rename file (manual work) ####
 # - For each variable, determine the new name 
@@ -27,13 +27,12 @@ source("R/rename_columns.R")
 source("R/rename_labels.R")
 source("R/new_column.R")
 
-
 ### 2. Configuration per dataset ####
 studyname <- "102.us-lls"
 paths <- read_delim("data/102.us-lls/2.data-checks/paths-102.us-lls.csv")
 
 renamepath <- paste0(paths$read_rename)
-rawdata <- read_sav(paste0(paths$load_data)) # Perhaps just re-run the code from basic-dataprep?
+rawdata <- read_sav(paste0(paths$load_data)) # Perhaps just re-run the code from basic-dataprep? discuss
 excludedpath <- paste0(paths$exclude)
 
 # Open new_columns csv file and provide values in each column, in row 2
