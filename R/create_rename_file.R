@@ -14,7 +14,7 @@ if (!require(dplyr, quietly = TRUE)) {
 }
 
 create_rename_file <- function(codebook, study, path){
-  renameobject <- codebook[, c(1, 2)] %>%
+  renameobject <- codebook[, c(1, 2, 3, 4)] %>%
     mutate(
       generation = NA,
       wave = NA,
