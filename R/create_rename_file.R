@@ -13,6 +13,12 @@ if (!require(dplyr, quietly = TRUE)) {
   library(dplyr)
 }
 
+if (!require(openxlsx, quietly = TRUE)) {
+  install.packages("openxlsx")
+  library(openxlsx)
+}
+
+
 create_rename_file <- function(codebook, study, path){
   renameobject <- codebook[, c(1, 2, 3, 4)] %>%
     mutate(
@@ -34,14 +40,14 @@ create_rename_file <- function(codebook, study, path){
             row.names = FALSE)
   
   # And save the to be filled version if it's not already there
-  to_be_filled_file <- paste0(path, "/1_rename_", study, "_filled.csv")
+  to_be_filled_file <- paste0(path, "/1_rename_", study, "_filled.xlsx")
   
   if (!file.exists(to_be_filled_file)) {
     # Write the CSV file only if it doesn't exist
-    write.csv(renameobject, to_be_filled_file, row.names = FALSE)
-    cat("CSV file written:", to_be_filled_file, "\n")
+    openxlsx::write.xlsx(renameobject, to_be_filled_file,rowNames = FALSE)
+    cat("Excel file written:", to_be_filled_file, "\n")
   } else {
-    cat("CSV file already exists:", to_be_filled_file, "\n", "File not overwritten")
+    cat("Excel file already exists:", to_be_filled_file, "\n", "File not overwritten")
   }
   
   # Save the object in the Environment
