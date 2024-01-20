@@ -4,7 +4,7 @@
 #' @param codebook A codebook dataframe with columns "name" and "label" as the first 2 columns.
 #' @param study The name of the study which should be saved in the file name, e.g., "102.us-lls"
 #' @param path A path to the folder where the rename files should be written, e.g., "data/102.us-lls/2.data-checks".
-#' @returns An empty rename object, with columns for name, label, datatype, value labels, generation, wave, etc.
+#' @returns An empty rename object, with columns for name, label, value labels, generation, wave, etc.
 #' @examples
 #' rename.empty <- create_rename_file(data.dictionary, "102.us-lls", "data/102.us-lls/2.data-checks")
 # Dependencies
@@ -20,7 +20,7 @@ if (!require(openxlsx, quietly = TRUE)) {
 
 
 create_rename_file <- function(codebook, study, path){
-  renameobject <- codebook[, c(1, 2, 3, 4)] %>%
+  renameobject <- codebook[, c(1, 2, 4)] %>%
     mutate(
       generation = NA,
       wave = NA,

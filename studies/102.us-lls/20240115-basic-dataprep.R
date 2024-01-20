@@ -33,8 +33,8 @@ studyname <- "102.us-lls"
 # If 1 file
 file_paths <- c("data/102.us-lls/2.data-checks/ICITOP/Lehigh_ICITOP.sav")
 
-# Path for writing the raw codebook to
-codebookpath <- paste0("data/102.us-lls/2.data-checks/codebook-raw-102.us-lls.csv")
+# Path for writing the raw codebook to. end with xlsx
+codebookpath <- paste0("data/102.us-lls/2.data-checks/codebook-raw-102.us-lls.xlsx")
 
 # Folder for writing rename files to
 renamepath <- "data/102.us-lls/2.data-checks"
