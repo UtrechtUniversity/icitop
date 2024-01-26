@@ -65,6 +65,8 @@ dfs <- sapply(file_paths,
               function(path) read_sav(path), 
               simplify = FALSE)
 
+# make a list with repetitions of filename equal to n variables  
+
 # Make sure that ID's are the same; in this case some are upper and other are lowercase
 dfs_lower <- lapply(dfs, make_lowercase)
 

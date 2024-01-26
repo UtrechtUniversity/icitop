@@ -8,12 +8,34 @@
 names<-c("par", "inc", "occ", "edu", "ses", "add", "car", "sex", "gen", "eth", "age", "rst ", "rso", "inv", "cst", "ris")
 
 # Make an empty data frame
-datacheckg1 <- data.frame(matrix(ncol = length(g1moderators), nrow = 0))
-colnames(datacheckg1) <- g1moderators
+datacheckg1 <- data.frame(matrix(ncol = length(names), nrow = 30))
+colnames(datacheckg1) <- names
 
 # for each variable in the rename document, select the g1 data and determine the waves
 # 
 # Filter and assign data to the 'par' column
+
+for (l in names){
+filtered_data <- rename_basic %>%
+  filter(str_detect(new_name, l) & str_detect(new_name, "g1")) %>%
+  distinct(wave)
+
+# Check if there are any rows in the filtered data
+if (nrow(filtered_data) > 0) {
+  # Assign the data to the 'par' column in 'datacheckg1'
+  datacheckg1[[l]][1:length(filtered_data$wave)] <- filtered_data$wave
+} else {
+  # If no rows are found, print NA or handle it accordingly
+  datacheckg1[[l]] <- NA
+}
+}
+
+# select rows that have values, delete rows that are all NA
+df_filtered <- datacheckg1[rowSums(is.na(datacheckg1)) < ncol(datacheckg1), ]
+
+
+
+
 filtered_data <- rename_basic %>%
   filter(str_detect(new_name, "par") & str_detect(new_name, "g1")) %>%
   distinct(wave)
@@ -21,7 +43,7 @@ filtered_data <- rename_basic %>%
 # Check if there are any rows in the filtered data
 if (nrow(filtered_data) > 0) {
     # Assign the data to the 'par' column in 'datacheckg1'
-  datacheckg1$par[1:length(filtered_data)] <- filtered_data$wave
+  datacheckg1$par[1:length(filtered_data$wave)] <- filtered_data$wave
 } else {
   # If no rows are found, print NA or handle it accordingly
   datacheckg1$par <- NA
