@@ -1,5 +1,5 @@
 # Basic data prep
-# Last edit 2024-01-15
+# Last edit 2024-01-20
 ###############################
 #
 # This script performs the following actions:
@@ -54,11 +54,9 @@ file_paths <- c("data/24.us-mlsra/2. data checks/2nd Gen Children Data/Maternal 
 
 # Path for writing the raw codebook to
 codebookpath <- paste0("data/24.us-mlsra/2. data checks/codebook-raw-24.us-mlsra.xlsx")
-# used to be "data/102.us-lls/2.data-checks/codebook-raw-102.us-lls.csv"
 
 # Folder for writing rename files to
 renamepath <- "data/24.us-mlsra/2. data checks"
-# used to be "data/102.us-lls/2.data-checks"
 
 ###### Run ###### 
 ### 3. Prepare data for relabelling ####
