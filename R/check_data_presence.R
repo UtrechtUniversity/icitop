@@ -4,6 +4,70 @@
 # is the moderator  also present? 
 # result is a dataframe with the waves for each variable
  
+## START New edits Dorien on 29th Jan 2024
+# With thanks to ChatGPT :)
+# Prompt and full answer can be seen here: https://chat.openai.com/share/abdd4db2-284d-442c-af56-93ace2e177fa
+
+# For testing, add some wave and construct info to rename_basic (remove later)
+rename_basic$wave[84] <- "w1"
+rename_basic$name_construct[84] <- "par"
+rename_basic$wave[85] <- "w2"
+rename_basic$name_construct[85] <- "par"
+
+# Filter dataframe for constructs of interest
+constructs_of_interest <- c("par", 
+                            "inc", 
+                            "occ", 
+                            "edu", 
+                            "ses", 
+                            "add", 
+                            "car", 
+                            "sex", 
+                            "gen", 
+                            "eth", 
+                            "age", 
+                            "rst", 
+                            "rso", 
+                            "inv", 
+                            "cst", 
+                            "ris")
+
+relevant_data <- rename_basic[rename_basic$name_construct %in% constructs_of_interest, ]
+
+# Create a tabular overview of waves per construct > This actually creates a list
+waves_per_construct <- tapply(relevant_data$wave, 
+                              relevant_data$name_construct, 
+                              function(x) unique(x))
+
+# Identify variables not present in the same wave as "par"
+par_wave <- waves_per_construct[["par"]]
+
+# Initialize an empty dataframe to store results
+missing_variables_df <- data.frame(construct = character(), 
+                                   missing_waves = character(), 
+                                   stringsAsFactors = FALSE)
+
+for (construct in names(waves_per_construct)) {
+  if (construct != "par") {
+    other_construct_wave <- waves_per_construct[[construct]]
+    missing_variables <- setdiff(par_wave, other_construct_wave)
+    
+    if (length(missing_variables) > 0) {
+      # Print results to console
+      cat("Variables not present in the same wave as 'par' for construct", construct, ":", paste(missing_variables, collapse = ", "), "\n")
+      
+      # And save the results in the dataframe
+      missing_variables_df <- rbind(missing_variables_df, data.frame(construct = construct, missing_waves = paste(missing_variables, collapse = ", ")))
+    }
+  }
+}
+
+# Now the missing_variables_df can be saved for later consultation
+## END new edits Dorien
+
+
+
+## OLD ##
 # define g1 variables
 names<-c("par", "inc", "occ", "edu", "ses", "add", "car", "sex", "gen", "eth", "age", "rst ", "rso", "inv", "cst", "ris")
 
