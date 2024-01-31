@@ -20,7 +20,7 @@ library(tidyverse) # multiple purposes; e.g., read_delim
 library(labelled)
 
 # Custom functions
-source("R/create_codebook.R")
+source("R/create_codebook_multi.R")
 source("R/create_rename_file.R")
 source("R/make_lowercase.R")
 
@@ -65,10 +65,11 @@ dfs <- sapply(file_paths,
               function(path) read_sav(path), 
               simplify = FALSE)
 
-# make a list with repetitions of filename equal to n variables  
-
 # Make sure that ID's are the same; in this case some are upper and other are lowercase
 dfs_lower <- lapply(dfs, make_lowercase)
+
+# when combining datasets: check if all datafiles have the same id
+id_check(dfs_lower, "id")
 
 # Merge all dfs into 1 merged_df
 merged_df <- reduce(dfs_lower, full_join, by = "id")
@@ -86,7 +87,7 @@ if ("tbl_df" %in% class(merged_df)) {
 
 # Make a codebook from the raw dataset and write it to csv
 # Note that this takes a long time
-data_dictionary <- create_codebook(merged_df, codebookpath)
+data_dictionary <- create_codebook_multi(dfs, merged_df, codebookpath)
 
 # Write an empty rename file for this study: one as empty one, and one to be filled
 rename_empty <- create_rename_file(data_dictionary, studyname, renamepath)

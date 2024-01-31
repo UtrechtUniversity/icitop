@@ -99,14 +99,6 @@ compare_ma_with_received <- bind_rows(present_outcomes,
                                       in_received_dataset)
 
 
-
-# descriptives
-
-
-
-
-
-
 # Old
 meta.outcome[meta.outcome$S_ID==102, ]$Outcome_name
 meta.outcome[meta.outcome$S_ID==102, ]$Outcome_description
