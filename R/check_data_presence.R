@@ -13,31 +13,72 @@
 # For testing, add some wave and construct info to rename_basic (remove later)
 rename_basic$wave[84] <- "w1"
 rename_basic$name_construct[84] <- "par"
+rename_basic$generation[84] <- "g1"
+rename_basic$target[84] <- "f"
+
 rename_basic$wave[85] <- "w2"
 rename_basic$name_construct[85] <- "par"
+rename_basic$generation[85] <- "g1"
+rename_basic$target[85] <- "m"
 
+rename_basic$wave[86] <- "v1"
+rename_basic$name_construct[86] <- "par"
+rename_basic$generation[86] <- "g2"
+rename_basic$target[86] <- "c2"
+
+rename_basic$wave[87] <- "v2"
+rename_basic$name_construct[87] <- "par"
+rename_basic$generation[87] <- "g2"
+
+rename_basic$wave[88] <- "v2"
+rename_basic$name_construct[88] <- "edu"
+rename_basic$generation[88] <- "g2"
 
 # Filter dataframe for constructs of interest G1
-constructs_of_interest_g1 <- c("par", 
-                            "inc", 
-                            "occ", 
-                            "edu", 
-                            "ses", 
-                            "add", 
-                            "car", 
-                            "sex", 
-                            "gen", 
-                            "eth", 
-                            "mage", 
-                            "page",
-                            "cage", 
-                            "rst", 
-                            "rso", 
-                            "inv", 
-                            "cst", 
-                            "ris",
-                            "bir"
-                      )
+# I made an excel sheet with information about (a selection of) the moderators and par 
+# I made a seperate one for G1 par and G2 par
+
+constructs_of_interest_g1 <-read_xlsx("docs/g1-moderators.xlsx")
+
+# THIS IS THE PART WE HAVE BEEN TALKING ABOUT
+# variables should be selected when they match the combined information in this sheet
+# (I now ignored target; not sure yet if I need it)
+# rows should only be selected if they meet ALL criteria
+
+relevant_data_g1 <- inner_join(constructs_of_interest_g1, rename_basic, by = c("generation", "name_construct"))
+# this gives a warning, but it does seem to do what I want
+# the variable in cell 88 (g2 edu - which is only relevant for G2 par) is ignored, but g1 edu (which IS relevant for g1 par) is included. 
+
+# Create a tabular overview of waves per construct > This actually creates a list. The rest below hasn't been changed
+waves_per_construct_g1 <- tapply(relevant_data_g1$wave, 
+                                 relevant_data_g1$name_construct, 
+                                 function(x) unique(x))
+
+par_wave_g1 <- waves_per_construct_g1[["par"]]
+
+missing_variables_df <- data.frame(construct = character(), 
+                                   missing_waves = character(), 
+                                   stringsAsFactors = FALSE)
+
+for (construct in names(waves_per_construct_g1)) {
+  if (construct != "par") {
+    other_construct_wave <- waves_per_construct_g1[[construct]]
+    missing_variables <- setdiff(par_wave_g1, other_construct_wave)
+    
+    if (length(missing_variables) > 0) {
+      # Print results to console
+      cat("Variables not present in the same wave as 'par' for construct", construct, ":", paste(missing_variables, collapse = ", "), "\n")
+      
+      # And save the results in the dataframe
+      missing_variables_df <- rbind(missing_variables_df, data.frame(construct = construct, missing_waves = paste(missing_variables, collapse = ", ")))
+    }
+  }
+} 
+
+
+
+#### OLD
+
 
 
 # Filter dataframe for constructs of interest G2
