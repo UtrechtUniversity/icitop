@@ -7,6 +7,9 @@
 # With thanks to ChatGPT :)
 # Prompt and full answer can be seen here: https://chat.openai.com/share/abdd4db2-284d-442c-af56-93ace2e177fa
 
+# Note Dorien: As most of this code has to be repeated 3 times (g1, g2, g3), 
+# we could create a function instead and apply it on all 3 generations?
+
 # For testing, add some wave and construct info to rename_basic (remove later)
 rename_basic$wave[84] <- "w1"
 rename_basic$name_construct[84] <- "par"
@@ -70,9 +73,16 @@ constructs_of_interest_g3 <- c("nch",
                             "gen"
                        )
 
+# TODO: filter on "g1", "g2", "g3"?
 relevant_data_g1 <- rename_basic[rename_basic$name_construct %in% constructs_of_interest_g1, ]
 relevant_data_g2 <- rename_basic[rename_basic$name_construct %in% constructs_of_interest_g2, ]
 relevant_data_g3 <- rename_basic[rename_basic$name_construct %in% constructs_of_interest_g3, ]
+
+# Alternative
+relevant_data_g1 <- rename_basic %>%
+  filter(grepl("g1", new_name, 
+               ignore.case = TRUE) & name_construct %in% constructs_of_interest_g1)
+# Remove if unnecessary
 
 
 # Create a tabular overview of waves per construct > This actually creates a list
@@ -101,10 +111,10 @@ missing_variables_df <- data.frame(construct = character(),
                                    missing_waves = character(), 
                                    stringsAsFactors = FALSE)
 
-for (construct in names(waves_per_construct)) {
+for (construct in names(waves_per_construct_g1)) {
   if (construct != "par") {
-    other_construct_wave <- waves_per_construct[[construct]]
-    missing_variables <- setdiff(par_wave, other_construct_wave)
+    other_construct_wave <- waves_per_construct_g1[[construct]]
+    missing_variables <- setdiff(par_wave_g1, other_construct_wave)
     
     if (length(missing_variables) > 0) {
       # Print results to console
