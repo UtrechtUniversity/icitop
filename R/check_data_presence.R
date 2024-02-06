@@ -36,7 +36,7 @@ rename_basic$generation[88] <- "g2"
 
 # Filter dataframe for constructs of interest G1
 # I made an excel sheet with information about (a selection of) the moderators and par 
-# I made a seperate one for G1 par and G2 par
+# I made a seperate one for G1 par and G2 par, but script below is only about g1 par
 
 constructs_of_interest_g1 <-read_xlsx("docs/g1-moderators.xlsx")
 
@@ -46,6 +46,7 @@ constructs_of_interest_g1 <-read_xlsx("docs/g1-moderators.xlsx")
 # rows should only be selected if they meet ALL criteria
 
 relevant_data_g1 <- inner_join(constructs_of_interest_g1, rename_basic, by = c("generation", "name_construct"))
+
 # this gives a warning, but it does seem to do what I want
 # the variable in cell 88 (g2 edu - which is only relevant for G2 par) is ignored, but g1 edu (which IS relevant for g1 par) is included. 
 
