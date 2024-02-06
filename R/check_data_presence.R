@@ -11,28 +11,10 @@
 # we could create a function instead and apply it on all 3 generations?
 
 # For testing, add some wave and construct info to rename_basic (remove later)
-rename_basic$wave[84] <- "w1"
-rename_basic$name_construct[84] <- "par"
-rename_basic$generation[84] <- "g1"
-rename_basic$target[84] <- "f"
-
-rename_basic$wave[85] <- "w2"
-rename_basic$name_construct[85] <- "par"
-rename_basic$generation[85] <- "g1"
-rename_basic$target[85] <- "m"
-
-rename_basic$wave[86] <- "v1"
-rename_basic$name_construct[86] <- "par"
-rename_basic$generation[86] <- "g2"
-rename_basic$target[86] <- "c2"
-
-rename_basic$wave[87] <- "v2"
-rename_basic$name_construct[87] <- "par"
-rename_basic$generation[87] <- "g2"
-
-rename_basic$wave[88] <- "v2"
-rename_basic$name_construct[88] <- "edu"
-rename_basic$generation[88] <- "g2"
+rename_basic$wave[84:88] <- c("w1", "w2", "v1", "v2", "v2")
+rename_basic$name_construct[84:88] <- c("par", "par", "par", "par", "edu")
+rename_basic$generation[84:88] <- c("g1", "g1", "g2", "g2", "g2")
+rename_basic$target[84:86] <- c("f", "m", "c2")
 
 # Filter dataframe for constructs of interest G1
 # I made an excel sheet with information about (a selection of) the moderators and par 
