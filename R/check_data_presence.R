@@ -3,12 +3,6 @@
 # is the moderator  also present? 
 # result is a dataframe with the waves for each variable
 
-### For testing, add some wave and construct info to rename_basic (remove later) ####
-rename_basic$wave[84:90] <- c("w1", "w2", "v1", "v2", "v2", "w1", "w2")
-rename_basic$name_construct[84:90] <- c("par", "par", "par", "par", "edu", "par", "occ")
-rename_basic$generation[84:90] <- c("g1", "g1", "g2", "g2", "g2", "g2", "g2")
-rename_basic$target[84:86] <- c("f", "m", "c2")
-
 ### Filter dataframe for constructs of interest G1 ####
 # I made an excel sheet with information about (a selection of) the moderators and par 
 # I made a separate one for G1 par and G2 par, but script below is only about g1 par
@@ -21,11 +15,10 @@ constructs_of_interest_g1 <-read_xlsx("docs/g1-moderators.xlsx")
 # (I now ignored target; not sure yet if I need it)
 # rows should only be selected if they meet ALL criteria
 
-relevant_data_g1 <- inner_join(constructs_of_interest_g1, 
+relevant_data_df <- inner_join(constructs_of_interest_g1, 
                                rename_basic, 
                                by = c("generation", "name_construct"))
 
-# this gives a warning, but it does seem to do what I want
 # the variable in cell 88 (g2 edu - which is only relevant for G2 par) is ignored, but g1 edu (which IS relevant for g1 par) is included. 
 
 # Testing for g2: ####
@@ -73,6 +66,8 @@ detect_missing_waves <- function(relevant_data_df){
   return(missing_waves_df)
 }
 
+
+detect_missing_waves(df_included)
 
 
 #### OLD ####
