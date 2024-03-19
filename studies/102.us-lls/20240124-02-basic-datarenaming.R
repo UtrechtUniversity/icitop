@@ -26,6 +26,7 @@ source("R/new_column.R")
 
 ### 2. Configuration per dataset ####
 studyname <- "102.us-lls"
+path<-paste0("data/102.us-lls/2.data-checks/")
 
 # load rda file created in step 01
 load("data/102.us-lls/2.data-checks/dataprep-102.us-lls.rda")
@@ -34,7 +35,7 @@ load("data/102.us-lls/2.data-checks/dataprep-102.us-lls.rda")
 renamepath <- paste0("data/102.us-lls/2.data-checks/1_rename_102.us-lls_filled.xlsx")
 
 # add a path to the excluded file
-excludedpath <- paste0("data/102.us-lls/2.data-checks/102.us-lls_exclude.xlsx")
+excludedpath <- paste0("data/102.us-lls/2.data-checks/2_exclude_102.us-lls.xlsx")
 
 # Study ID in meta analysis (if present)
 study_id_ma <- 102

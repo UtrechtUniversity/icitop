@@ -3,162 +3,103 @@
 # is the moderator  also present? 
 # result is a dataframe with the waves for each variable
 
-### Filter dataframe for constructs of interest G1 ####
-# I made an excel sheet with information about (a selection of) the moderators and par 
-# I made a separate one for G1 par and G2 par, but script below is only about g1 par
-# Note Dorien: minor detail, you may consider converting the excel to csv later (csv = open format, xlsx = closed format)
+# output:
+# targets for par per wave
+# missing g1 (but complete)
+# present g1 (same as missing but opposite)
 
-constructs_of_interest_g1 <-read_xlsx("docs/g1-moderators.xlsx")
+### 1. Filter on constructs of interest ####
 
-# THIS IS THE PART WE HAVE BEEN TALKING ABOUT
+# upload file with moderators
+constructs_of_interest_g1 <-read_xlsx("docs/g1-moderators.xlsx") # g1 moderators - for each wave G1 parenting is measured
+constructs_of_interest_g2 <-read_xlsx("docs/g2-moderators.xlsx") # g2 moderators- for each wave G2 parenting is measured
+constructs_of_interest_g2_static<-read_xlsx("docs/g2-moderators-static.xlsx") # g2 moderators -One measure for each G2 participant
+
 # variables should be selected when they match the combined information in this sheet
-# (I now ignored target; not sure yet if I need it)
-# rows should only be selected if they meet ALL criteria
+relevant_data_g1 <- inner_join(constructs_of_interest_g1, 
+                              rename_basic, 
+                              by = c("generation", "name_construct"))
 
-relevant_data_df <- inner_join(constructs_of_interest_g1, 
-                               rename_basic, 
+relevant_data_g2 <- inner_join(constructs_of_interest_g2,
+                               rename_basic,
                                by = c("generation", "name_construct"))
 
-# the variable in cell 88 (g2 edu - which is only relevant for G2 par) is ignored, but g1 edu (which IS relevant for g1 par) is included. 
+relevant_data_g2_static <- inner_join(constructs_of_interest_g2_static, 
+                                rename_basic, 
+                                by = c("generation", "name_construct"))
 
-# Testing for g2: ####
-constructs_of_interest_g2 <-read_xlsx("docs/g2-moderators.xlsx")
-relevant_data_g2 <- inner_join(constructs_of_interest_g2, 
-                               rename_basic, 
-                               by = c("generation", "name_construct"))
+# For static G2 moderators: determine missing variables:
+available_g2_static <- unique(relevant_data_g2_static[, c("name_construct", "wave", "target","generation"  )])
+missing_g2_static <- as.data.frame(constructs_of_interest_g2_static$name_construct[!constructs_of_interest_g2_static$name_construct %in% available_g2_static$name_construct])
+colnames(missing_g2_static)<-"name_construct"
 
-# Suggested function ####
-# Note Dorien: can we create a function for the rows from hereon? Or is that too 
-# complicated because of the different requirements per generation?
-# for example (does not work for g2 right now because no par in g2 yet):
-detect_missing_waves <- function(relevant_data_df){
-  waves_per_construct <- tapply(relevant_data_df$wave, 
-                                relevant_data_df$name_construct, 
-                                function(x) unique(x))
+#### 2. Detect missing waves function ####
+detect_missing_waves <- function(df, generation, constructs){
+ 
+  # For available data: Get unique combinations of name_construct, generation, and target
+  available_data <- unique(df[, c("name_construct", "wave", "target","generation"  )])
   
-  par_wave <- waves_per_construct[["par"]]
-  
-  missing_waves_df <- data.frame(construct = character(), 
+  # For missing data: Initialize an empty data frame to store missing waves
+  missing_waves_df <- data.frame(name_construct = character(), 
                                  missing_waves = character(), 
                                  stringsAsFactors = FALSE)
   
-  for (construct in names(waves_per_construct)) {
-    if (construct != "par") {
-      other_construct_wave <- waves_per_construct[[construct]]
-      missing_waves <- setdiff(par_wave, other_construct_wave)
-      
-      if (length(missing_waves) > 0) {
-        # Print results to console
-        cat("Variables not present in the same wave as 'par' for construct", 
-            construct, ":", 
-            paste(missing_waves, 
-                  collapse = ", "), 
-            "\n")
-        
-        # And save the results in the dataframe
-        missing_waves_df <- rbind(missing_waves_df, 
-                                      data.frame(construct = construct, 
-                                                 missing_waves = paste(missing_waves, 
-                                                                       collapse = ", ")))
-      }
-    }
-  }
-  return(missing_waves_df)
-}
-
-
-detect_missing_waves(df_included)
-
-
-#### OLD ####
-
-# With thanks to ChatGPT :)
-# Prompt and full answer can be seen here: https://chat.openai.com/share/abdd4db2-284d-442c-af56-93ace2e177fa
-
-# Filter dataframe for constructs of interest G2
-constructs_of_interest_g2 <- c("eth", 
-                            "aab", 
-                            "sex", 
-                            "gen", 
-                            "bir", 
-                            "cst", 
-                            "ris", 
-                            "age", 
-                            "rst", 
-                            "car", 
-                            "etp", 
-                            "res",
-                            "req",
-                            "vinc",
-                            "occ",
-                            "edu",
-                            "ses",
-                            "alc",
-                            "dru",
-                            "age",
-                            "inv",
-                            "sub"
-)
-
-# Filter dataframe for constructs of interest G3
-constructs_of_interest_g3 <- c("nch",
-                            "bir",
-                            "age",
-                            "sex",
-                            "gen"
-                       )
-
-# TODO: filter on "g1", "g2", "g3"?
-relevant_data_g1 <- rename_basic[rename_basic$name_construct %in% constructs_of_interest_g1, ]
-relevant_data_g2 <- rename_basic[rename_basic$name_construct %in% constructs_of_interest_g2, ]
-relevant_data_g3 <- rename_basic[rename_basic$name_construct %in% constructs_of_interest_g3, ]
-
-# Alternative
-relevant_data_g1 <- rename_basic %>%
-  filter(grepl("g1", new_name, 
-               ignore.case = TRUE) & name_construct %in% constructs_of_interest_g1)
-# Remove if unnecessary
-
-
-# Create a tabular overview of waves per construct > This actually creates a list
-waves_per_construct_g1 <- tapply(relevant_data_g1$wave, 
-                              relevant_data_g1$name_construct, 
-                              function(x) unique(x))
-
-waves_per_construct_g2 <- tapply(relevant_data_g2$wave, 
-                              relevant_data_g2$name_construct, 
-                              function(x) unique(x))
-
-waves_per_construct_g3 <- tapply(relevant_data_g3$wave, 
-                              relevant_data_g3$name_construct, 
-                              function(x) unique(x))
-
-
-# Identify variables not present in the same wave as "par"
-par_wave_g1 <- waves_per_construct_g1[["par"]]
-par_wave_g2 <- waves_per_construct_g2[["par"]]
-par_wave_g3 <- waves_per_construct_g3[["par"]]
-
-
-# stopped here; need to add wave into the data
-# Initialize an empty dataframe to store results
-missing_variables_df <- data.frame(construct = character(), 
-                                   missing_waves = character(), 
-                                   stringsAsFactors = FALSE)
-
-for (construct in names(waves_per_construct_g1)) {
-  if (construct != "par") {
-    other_construct_wave <- waves_per_construct_g1[[construct]]
-    missing_variables <- setdiff(par_wave_g1, other_construct_wave)
+  # Determine the waves for par
+  par_waves <- unique(df$wave[df$name_construct == "par" &
+                                df$generation == generation]) 
+  
+  # Loop through each combination of name_construct, generation, and target
+  for (i in 1:nrow(constructs)) {
+    construct <- constructs$name_construct[i]
+    generation <- constructs$generation[i]
+   
+    # Subset data for the current combination generation and construct
+    subset_df <- df[df$name_construct == construct &
+                      df$generation == generation,]
     
-    if (length(missing_variables) > 0) {
-      # Print results to console
-      cat("Variables not present in the same wave as 'par' for construct", construct, ":", paste(missing_variables, collapse = ", "), "\n")
+    # Get unique waves for the current combination
+    waves <- unique(subset_df$wave)
+    
+    # If the construct is "par", continue to the next iteration of the for loop
+    if (construct == "par") next
+    
+    # Find missing waves for the current combination
+    missing_waves <- setdiff(par_waves, waves)
+    
+    # If missing waves are found, add them to the missing_waves_df
+    if (length(missing_waves) > 0) {
       
-      # And save the results in the dataframe
-      missing_variables_df <- rbind(missing_variables_df, data.frame(construct = construct, missing_waves = paste(missing_variables, collapse = ", ")))
+      # Print results to console
+      cat("Not present in the same wave as 'par'", 
+          construct, "in generation", generation, ":", 
+          paste(missing_waves, collapse = ", "), "\n")
+      
+      # Add missing waves to the missing_waves_df
+      missing_waves_df <- rbind(missing_waves_df, 
+                                data.frame(generation = generation,
+                                           name_construct = construct, 
+                                           missing_waves = paste(missing_waves, collapse = ", ")))
+      
     }
   }
+  return(list(missing_waves_df,available_data))
+  
 }
 
-# Now the missing_variables_df can be saved for later consultation
+#### 3. Use the function for the relevant data ####
+
+missing_g1 <- detect_missing_waves(relevant_data_g1, "g1",constructs_of_interest_g1)[[1]]
+available_g1<-detect_missing_waves(relevant_data_g1, "g1",constructs_of_interest_g1)[[2]]
+missing_g2 <- detect_missing_waves(relevant_data_g2, "g2", constructs_of_interest_g2)[[1]]
+available_g2 <- detect_missing_waves(relevant_data_g2, "g2",constructs_of_interest_g2)[[2]]
+
+openxlsx::write.xlsx(missing_g1, paste0(path,"missing_g1_",studyname,".xlsx"))
+openxlsx::write.xlsx(available_g1, paste0(path,"available_g1",studyname,".xlsx"))
+openxlsx::write.xlsx(missing_g2, paste0(path,"missing_g2_",studyname,".xlsx"))
+openxlsx::write.xlsx(available_g2, paste0(path,"available_g2_",studyname,".xlsx"))
+openxlsx::write.xlsx(missing_g2_static, paste0(path,"missing_g2_static_",studyname,".xlsx"))
+openxlsx::write.xlsx(available_g2_static, paste0(path,"available_g2_static_",studyname,".xlsx"))
+
+
+
+
