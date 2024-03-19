@@ -1,5 +1,5 @@
 # Basic data prep
-# Last edit 2024-01-15
+# Last edit 2024-3-19
 ###############################
 #
 # This script performs the following actions:
@@ -86,7 +86,7 @@ if ("tbl_df" %in% class(merged_df)) {
 
 # Make a codebook from the raw dataset and write it to csv
 # Note that this takes a long time
-data_dictionary <- create_codebook(merged_df, codebookpath)
+data_dictionary <- create_codebook_multi(dfs, merged_df, codebookpath)
 
 # Write an empty rename file for this study: one as empty one, and one to be filled
 rename_empty <- create_rename_file(data_dictionary, studyname, renamepath)

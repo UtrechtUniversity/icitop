@@ -14,33 +14,48 @@
 # result is a dataframe with the waves for each variable
 
 ### 1. Filter on constructs of interest ####
-
 # upload file with moderators
 constructs_of_interest_g1 <-read_xlsx("docs/g1-moderators.xlsx") # g1 moderators - for each wave G1 parenting is measured
-constructs_of_interest_g2 <-read_xlsx("docs/g2-moderators.xlsx") # g2 moderators- for each wave G2 parenting is measured
-constructs_of_interest_g2_static<-read_xlsx("docs/g2-moderators-static.xlsx") # g2 moderators -One measure for each G2 participant
+constructs_of_interest_g2 <-read_xlsx("docs/g2-moderators.xlsx") # g2 moderators - for each wave G2 parenting is measured
+
+#### 2. Detect missing data functions ####
+
+# For static G2 moderators: determine missing variables function
+detect_missing_static<-function(df){
+  
+  # upload file with moderators
+  constructs_of_interest_g2_static<-read_xlsx("docs/g2-moderators-static.xlsx") # g2 moderators -One measure for each G2 participant
+  
+  # filter data for relevant constructs
+  relevant_data_g2_static <- inner_join(constructs_of_interest_g2_static, 
+                                      df, 
+                                      by = c("generation", "name_construct")) 
+  # provide all unique combinations
+  available_g2_static <- unique(relevant_data_g2_static[, c("name_construct", "wave", "target","generation"  )]) 
+
+  # determine missing data
+  missing_g2_static <- as.data.frame(constructs_of_interest_g2_static$name_construct[!constructs_of_interest_g2_static$name_construct %in% available_g2_static$name_construct])
+  colnames(missing_g2_static)<-"name_construct"
+
+  # write excel sheet
+  openxlsx::write.xlsx(missing_g2_static, paste0(path,"missing_g2_static_",studyname,".xlsx"))
+  openxlsx::write.xlsx(available_g2_static, paste0(path,"available_g2_static_",studyname,".xlsx"))
+  return(list(available_g2_static,missing_g2_static))
+}
+
+### HIER VERDER
 
 # variables should be selected when they match the combined information in this sheet
 relevant_data_g1 <- inner_join(constructs_of_interest_g1, 
-                              rename_basic, 
-                              by = c("generation", "name_construct"))
+                               rename_basic, 
+                               by = c("generation", "name_construct"))
 
 relevant_data_g2 <- inner_join(constructs_of_interest_g2,
                                rename_basic,
                                by = c("generation", "name_construct"))
 
-relevant_data_g2_static <- inner_join(constructs_of_interest_g2_static, 
-                                rename_basic, 
-                                by = c("generation", "name_construct"))
-
-# For static G2 moderators: determine missing variables:
-available_g2_static <- unique(relevant_data_g2_static[, c("name_construct", "wave", "target","generation"  )])
-missing_g2_static <- as.data.frame(constructs_of_interest_g2_static$name_construct[!constructs_of_interest_g2_static$name_construct %in% available_g2_static$name_construct])
-colnames(missing_g2_static)<-"name_construct"
-
-#### 2. Detect missing waves function ####
 detect_missing_waves <- function(df, generation, constructs){
- 
+
   # For available data: Get unique combinations of name_construct, generation, and target
   available_data <- unique(df[, c("name_construct", "wave", "target","generation"  )])
   
@@ -103,8 +118,7 @@ openxlsx::write.xlsx(missing_g1, paste0(path,"missing_g1_",studyname,".xlsx"))
 openxlsx::write.xlsx(available_g1, paste0(path,"available_g1",studyname,".xlsx"))
 openxlsx::write.xlsx(missing_g2, paste0(path,"missing_g2_",studyname,".xlsx"))
 openxlsx::write.xlsx(available_g2, paste0(path,"available_g2_",studyname,".xlsx"))
-openxlsx::write.xlsx(missing_g2_static, paste0(path,"missing_g2_static_",studyname,".xlsx"))
-openxlsx::write.xlsx(available_g2_static, paste0(path,"available_g2_static_",studyname,".xlsx"))
+
 
 
 
