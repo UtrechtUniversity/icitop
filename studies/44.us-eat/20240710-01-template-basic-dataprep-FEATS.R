@@ -20,7 +20,7 @@ library(tidyverse) # multiple purposes; e.g., read_delim
 library(labelled)
 
 # Custom functions
-source("R/create_codebook.R")
+source("R/2024_10_11_create_codebook_concept.R")
 source("R/create_rename_file.R")
 source("R/make_lowercase.R")
 source("R/same_id.R")
@@ -94,7 +94,9 @@ if ("tbl_df" %in% class(merged_df)) {
 
 # Make a codebook from the raw dataset and write it to csv
 # Note that this takes a long time
-data_dictionary <- create_codebook_multi(dfs_1, merged_df, codebookpath)
+# all characterers are not displayed properly in codebook. Transfer to numeric for codebook
+merged_df_codebook<-lapply(merged_df, as.numeric)
+data_dictionary <- create_codebook_concept(dfs_1, merged_df, codebookpath)
 
 # Write an empty rename file for this study: one as empty one, and one to be filled
 rename_empty <- create_rename_file(data_dictionary, studyname, renamepath)
