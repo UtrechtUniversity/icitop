@@ -65,9 +65,11 @@ dfs_3<-read.csv(file_paths_3,sep=";")
 names(dfs_1) <- paste0(file_paths_1, " sheet ", sheet_names)
 
 # combine dfs_2 and dfs_3 with key
-colnames(dfs_2)[colnames(dfs_2) == "Record.Id."] <- "id"
-colnames(dfs_3)[colnames(dfs_3) == "record_id"] <- "id"
-dfs_4<-full_join(dfs_2, dfs_3, by ="id" )
+colnames(dfs_2)[colnames(dfs_2) == "Record.Id."] <- "record_id"
+colnames(dfs_3)[colnames(dfs_3) == "record_id"] <- "record_id"
+colnames(dfs_2)[colnames(dfs_2) == "participant_code"] <- "id"
+
+dfs_4<-full_join(dfs_2, dfs_3, by ="record_id" )
 
 # Make sure that ID's are the same; in this case some are upper and other are lowercase
 dfs_1 <- c(dfs_1, list(dfs_4))
@@ -78,11 +80,17 @@ dfs_lower <- lapply(dfs_1, make_lowercase)
 # when combining datasets: check if all datafiles have the same id
 id_check(dfs_lower, "id")
 
+# make sure all id's are of compatible types (factor)
+dfs_lower <- lapply(dfs_lower, function(df) {
+  df$id <- as.character(df$id)
+  return(df)
+})
+
 # Merge all dfs into 1 merged_df
-merged_df <- reduce(dfs_lower, full_join, by = "id")
+ merged_df <- reduce(dfs_lower, full_join, by = "id")
 
 # Convert the source_id column to a factor, if neccesary
-#merged_df$source_id <- as.factor(merged_df$source_id)
+# merged_df$id <- as.factor(merged_df$id)
 
 # Check if merged_df is a tbl_df and otherwise convert to tibble
 if ("tbl_df" %in% class(merged_df)) {
