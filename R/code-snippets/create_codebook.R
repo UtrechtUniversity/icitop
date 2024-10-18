@@ -22,7 +22,7 @@ if (!require(openxlsx, quietly = TRUE)) {
   library(openxlsx)
 }
 
-create_codebook <- function(dfs, df, path) {
+create_codebook_multi <- function(dfs, df, path) {
   codebook_df <- codebook::codebook_table(df) 
   
   # Create a list with the name of the source files
@@ -49,23 +49,6 @@ create_codebook <- function(dfs, df, path) {
  
   codebook_df[,ncol(codebook_df)+1]<-source$source
   names(codebook_df)[ncol(codebook_df)]<-"source"
-  
-  # if the file does not have labels, these columns are missing. They should be added.  
-  
-  # Define the required columns in the desired order
-  required_columns <- c(  "name",	"label",	"data_type",	"value_labels",	"n_missing",	"complete_rate",	
-                          "min",	"median",	"max",	"mean",	"sd",	"n_value_labels",	"hist",	"format.spss",	"display_width",	"source")
-  
-  # Find which columns are missing
-  missing_columns <- setdiff(required_columns, colnames(codebook_df))
-  
-  # Add missing columns (if any), ensuring they are added in the correct order
-  for (col in missing_columns) {
-    codebook_df[[col]] <- NA  # Add the missing column with NA values
-  }
-  
-  # Reorder the columns to match the required order
-  codebook_df <- codebook_df[required_columns]
   
   openxlsx::write.xlsx(codebook_df, path)
   return(codebook_df)

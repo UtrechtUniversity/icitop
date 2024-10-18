@@ -1,5 +1,5 @@
 # Basic data prep
-# Last edit 2024-10-08
+# Last edit 2024-10-18
 ###############################
 #
 # This script performs the following actions:
@@ -20,7 +20,7 @@ library(tidyverse) # multiple purposes; e.g., read_delim
 library(labelled)
 
 # Custom functions
-source("R/2024_10_11_create_codebook_concept.R")
+source("R/create_codebook.R")
 source("R/create_rename_file.R")
 source("R/make_lowercase.R")
 source("R/same_id.R")
@@ -104,7 +104,7 @@ if ("tbl_df" %in% class(merged_df)) {
 # Note that this takes a long time
 # all characterers are not displayed properly in codebook. Transfer to numeric for codebook
 merged_df_codebook<-lapply(merged_df, as.numeric)
-data_dictionary <- create_codebook_concept(dfs_1, merged_df, codebookpath)
+data_dictionary <- create_codebook(dfs_1, merged_df, codebookpath)
 
 # Write an empty rename file for this study: one as empty one, and one to be filled
 rename_empty <- create_rename_file(data_dictionary, studyname, renamepath)
@@ -113,3 +113,6 @@ rename_empty <- create_rename_file(data_dictionary, studyname, renamepath)
 save(merged_df, file= paste0("data/24.us-mlsra/2. data checks/dataprep-",
                              studyname,
                              ".rda"))
+
+# Note: various variables are missing - see yellow marked variables in datadictionairy childfeeding study
+# or sex of all children?

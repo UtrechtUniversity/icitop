@@ -82,7 +82,9 @@ if ("tbl_df" %in% class(merged_df)) {
 
 # Make a codebook from the raw dataset and write it to csv
 # Note that this takes a long time
-data_dictionary <- create_codebook_multi(dfs, merged_df, codebookpath)
+# all characterers are not displayed properly in codebook. Transfer to numeric for codebook
+merged_df_codebook<-lapply(merged_df, as.numeric)
+data_dictionary <- create_codebook(dfs, merged_df_codebook, codebookpath)
 
 # Write an empty rename file for this study: one as empty one, and one to be filled
 rename_empty <- create_rename_file(data_dictionary, studyname, renamepath)
@@ -91,3 +93,5 @@ rename_empty <- create_rename_file(data_dictionary, studyname, renamepath)
 save(merged_df, file= paste0("data/24.us-mlsra/2. data checks/dataprep-",
                              studyname,
                              ".rda"))
+
+# note: request relation_length_4
