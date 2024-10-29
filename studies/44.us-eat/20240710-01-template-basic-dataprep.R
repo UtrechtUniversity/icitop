@@ -90,8 +90,8 @@ data_dictionary <- create_codebook(dfs, merged_df_codebook, codebookpath)
 rename_empty <- create_rename_file(data_dictionary, studyname, renamepath)
 
 # Write the merged_df dataframe to an .rda file for later further processing
-save(merged_df, file= paste0("data/24.us-mlsra/2. data checks/dataprep-",
+save(merged_df, file= paste0("data/",studyname, "/2.data-check/dataprep-",
                              studyname,
                              ".rda"))
 
-# note: request relation_length_4
+
