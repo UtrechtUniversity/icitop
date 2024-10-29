@@ -13,7 +13,7 @@ rename_labels <- function(df, rename_data) {
   for (i in 1:length(colnames(df))) {
     
     # Select matching names between the df colnames and the values in rename_data$name
-    matching_row <- rename_data[rename_data$name %in% colnames(df)[i], ]
+    matching_row <- rename_data[rename_data$new_name %in% colnames(df)[i], ]
     
     # If the match is not 0 or NA
     if (nrow(matching_row) > 0 && !is.na(matching_row$new_label)) {

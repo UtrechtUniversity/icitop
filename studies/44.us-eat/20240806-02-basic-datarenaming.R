@@ -26,8 +26,13 @@ source("R/new_column.R")
 ### 2. Configuration per dataset ####
 studyname <- "44.us-eat"
 
+# Study ID in meta analysis (if present)
+study_id_ma <- 44
+
+#####################
+
 # load rda file created in step 01
-load(paste0("data/24.us-mlsra/2. data checks/dataprep-",
+load(paste0("data/", studyname, "/2.data-check/dataprep-",
             studyname,
             ".rda"))
 
@@ -44,9 +49,6 @@ path<-paste0("data/", studyname, "/2.data-check/")
 # this is currently not done
 # added_values <- read_delim(file = paste0(paths$read_new_columns),
 #                           delim = ";")
-
-# Study ID in meta analysis (if present)
-study_id_ma <- 44
 
 ### 3. Relabel and exclude ####
 rename_basic <- read_excel(renamepath)%>%
@@ -66,6 +68,8 @@ df_included <- merged_df[, !is.na(rename_basic$new_name)] %>%
   
   # Rename labels according to the rename_basic file
   rename_labels(rename_basic) 
+
+
   
 # Add new columns provided in added_values
 #  new_column(added_values)
