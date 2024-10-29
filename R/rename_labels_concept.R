@@ -36,5 +36,21 @@ rename_labels <- function(df, rename_data) {
       
     }
   }
-  return(df)
+  # Check which variables didn't get a label
+  no_labels <- sapply(df, function(x) is.null(attr(x, "labels")))
+  no_label_vars <- names(df)[no_labels]
+  
+  # Display a message if there are variables without labels
+  if (length(no_label_vars) > 0) {
+    cat("Check the following variables without labels:", paste(no_label_vars, collapse = ", "), "\n")
+  } else {
+    cat("All variables have labels.\n")
+  }
+  
+  
+  
+   return(df)
+  
+ 
 }
+
