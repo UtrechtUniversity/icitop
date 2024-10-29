@@ -20,7 +20,7 @@ library(labelled)
 # Custom functions
 source("R/make_unique.R")
 source("R/rename_columns.R")
-source("R/rename_labels.R")
+source("R/rename_labels_concept.R")
 source("R/new_column.R")
 
 ### 2. Configuration per dataset ####
@@ -60,17 +60,19 @@ df_excluded <- merged_df[, is.na(rename_basic$new_name)]
 # Write the file with excluded variables
 write.csv(df_excluded, excludedpath, row.names = FALSE)
 
+# if needed: change all missing values to NA
+merged_df<-merged_df%>%
+mutate_all(~ na_if(., "."))
+
 # Rename the indicated labels and columns and add new columns
 df_included <- merged_df[, !is.na(rename_basic$new_name)] %>%
 
-  # Rename columns according to the rename_basic file
+# Rename columns according to the rename_basic file
   rename_columns(rename_basic) %>%
   
   # Rename labels according to the rename_basic file
   rename_labels(rename_basic) 
 
-
-  
 # Add new columns provided in added_values
 #  new_column(added_values)
 
