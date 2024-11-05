@@ -1,5 +1,5 @@
 # Basic data prep
-# Last edit 2024-10-18
+# Last edit 2024-11-05
 ###############################
 #
 # This script performs the following actions:
@@ -110,7 +110,7 @@ data_dictionary <- create_codebook(dfs_1, merged_df, codebookpath)
 rename_empty <- create_rename_file(data_dictionary, studyname, renamepath)
 
 # Write the merged_df dataframe to an .rda file for later further processing
-save(merged_df, file= paste0("data/24.us-mlsra/2. data checks/dataprep-",
+save(merged_df, file= paste0("data/44.us-eat/2.data-check/dataprep-",
                              studyname,
                              ".rda"))
 
