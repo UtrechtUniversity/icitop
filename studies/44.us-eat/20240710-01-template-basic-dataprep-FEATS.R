@@ -61,6 +61,10 @@ dfs_1 <- lapply(sheet_names,
 dfs_2 <- read.csv(file_paths_2)
 dfs_3<-read.csv(file_paths_3,sep=";")
 
+# check NA rows for df_3
+# the Kids EAT! study has 310 rows, but many are NA 
+dfs_3 <- dfs_3[!apply(dfs_3[,11:110], 1, function(x) all(is.na(x))), ]
+
 # the name of each list item is the sheet name for trackability
 names(dfs_1) <- paste0(file_paths_1, " sheet ", sheet_names)
 
@@ -68,6 +72,12 @@ names(dfs_1) <- paste0(file_paths_1, " sheet ", sheet_names)
 colnames(dfs_2)[colnames(dfs_2) == "Record.Id."] <- "record_id"
 colnames(dfs_3)[colnames(dfs_3) == "record_id"] <- "record_id"
 colnames(dfs_2)[colnames(dfs_2) == "participant_code"] <- "id"
+
+# See which record id's are missing
+only_in_df2 <- setdiff(dfs_2$record_id, dfs_3$record_id) # 314 is all NA
+only_in_df3 <- setdiff(dfs_3$record_id, dfs_2$record_id)
+filtered_df <- dfs_3[dfs_3$record_id %in% only_in_df3, ]
+
 
 dfs_4<-full_join(dfs_2, dfs_3, by ="record_id" )
 
