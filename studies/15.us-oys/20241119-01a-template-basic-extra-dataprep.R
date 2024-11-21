@@ -7,7 +7,6 @@
 # 2. Configuration per dataset
 # 3. Evaluate which ICPSR files are needed for data renaming
 
-
 ### 1. Load dependencies ####
 # Generic libraries
 library(readxl) 
