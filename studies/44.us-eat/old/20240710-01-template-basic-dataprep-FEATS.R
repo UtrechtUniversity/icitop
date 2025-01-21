@@ -41,7 +41,13 @@ file_paths_2<-("data/44.us-eat/1.raw-data/ChildFeedingStudy-DataFileForSanne_DAT
 
 # 3.  csv file with G2 data (has a different structure than 2 and can't be loaded together in a list)
 file_paths_3<-("data/44.us-eat/1.raw-data/Data Share - Kids EAT!/Data Share - Kids EAT!/cfs_survey_deidentified_06072024.csv")
-  
+
+# 4. excel file with the age of participants when the EAT 2017/2018 survey was completed, as well as the date  
+file_paths_4<-("data/44.us-eat/1.raw-data/KidsEAT Age.xlsx")
+
+# 5. excel file with date at which KIDS eat was administered. Use file 4 and 5 to calculate age
+file_paths_5<-("data/44.us-eat/1.raw-data/KidsEAT Survey Date.xlsx")
+
 # get sheet names
 sheet_names<- getSheetNames(file_paths_1)
 
